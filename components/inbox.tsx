@@ -45,7 +45,7 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
 
   if (selectedMessage) {
     return (
-      <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
+      <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm overflow-y-auto">
         <EnvelopeReveal
           senderName={selectedMessage.is_anonymous ? "Anonymous" : (selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone")}
           content={selectedMessage.content || ""}
@@ -129,7 +129,10 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
                       From: {message.is_anonymous ? "Anonymous" : (message.sender_name || message.sender_full_name || message.sender_username || "Someone")}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date(message.created_at).toLocaleDateString()}
+                      {new Date(message.created_at).toLocaleString([], {
+                        dateStyle: 'medium',
+                        timeStyle: 'short'
+                      })}
                     </p>
                   </div>
                 </div>

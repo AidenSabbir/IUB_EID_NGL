@@ -106,15 +106,6 @@ export function EidDecorations() {
         </motion.div>
       ))}
 
-      {/* Background Pattern Overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='currentColor' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-          backgroundSize: '100px 100px'
-        }}
-      />
-
       {/* Prominent Mosque at Bottom */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 w-full flex justify-center text-amber-600/30 dark:text-amber-500/20 pointer-events-none mix-blend-multiply dark:mix-blend-screen"

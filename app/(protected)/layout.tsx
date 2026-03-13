@@ -29,7 +29,7 @@ export default function ProtectedLayout({
   return (
     <Suspense>
       <AuthGuard>
-        <div className="flex h-screen w-full bg-background overflow-hidden">
+        <div className="flex h-screen w-full overflow-hidden">
           <BottomNav />
           <div className="flex-1 flex flex-col h-full overflow-hidden relative">
             <header className="md:hidden flex h-16 shrink-0 items-center gap-3 border-b border-border bg-card px-4 shadow-sm z-10 sticky top-0">
@@ -37,7 +37,7 @@ export default function ProtectedLayout({
               <h1 className="font-serif text-2xl font-semibold text-primary">Eid Moon</h1>
             </header>
             
-            <main className="flex-1 overflow-y-auto pb-24 md:pb-0 relative bg-background">
+            <main className="flex-1 overflow-y-auto pb-24 md:pb-0 relative">
               {children}
             </main>
           </div>
