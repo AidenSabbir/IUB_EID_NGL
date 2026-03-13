@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Playfair_Display } from "next/font/google";
+import { EidDecorations } from "@/components/eid-decorations";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -38,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body className={`${geistSans.className} ${playfair.variable} antialiased font-sans`}>
+        <EidDecorations />
         {children}
       </body>
     </html>
