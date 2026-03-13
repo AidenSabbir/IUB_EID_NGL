@@ -116,26 +116,8 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col space-y-6 bg-white p-6 rounded-xl border border-amber-100 shadow-sm max-w-lg mx-auto w-full"
+      className="flex flex-col space-y-4 w-full"
     >
-      <div className="flex items-center space-x-4">
-        <Avatar className="w-16 h-16 border-2 border-amber-100">
-          <AvatarImage
-            src={recipient.avatar_url || ""}
-            alt={recipient.username}
-          />
-          <AvatarFallback className="bg-amber-50 text-amber-700 font-medium text-xl uppercase">
-            {recipient.username.slice(0, 2)}
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <p className="text-sm text-amber-700/80">Sending a message to</p>
-          <p className="text-xl font-medium text-amber-950">
-            {recipient.full_name || `@${recipient.username}`}
-          </p>
-        </div>
-      </div>
-
       <div className="space-y-2">
         <div className="relative">
           <Textarea
