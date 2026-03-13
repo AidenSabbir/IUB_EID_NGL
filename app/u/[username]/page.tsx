@@ -59,10 +59,10 @@ async function ProfileData({ paramsPromise }: { paramsPromise: Promise<{ usernam
     notFound();
   }
 
-  const { data: { session } } = await supabase.auth.getSession();
-  const isOwnProfile = session?.user.id === profile.id;
+  
+  
 
-  return <ProfileCard profile={profile} isOwnProfile={isOwnProfile} />;
+  return <ProfileCard profile={profile}  />;
 }
 
 export default function ProfilePage({

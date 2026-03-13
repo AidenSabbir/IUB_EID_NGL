@@ -13,6 +13,7 @@ interface Message {
   sender_username: string | null;
   sender_avatar: string | null;
   sender_full_name: string | null;
+  sender_name?: string | null;
   is_anonymous: boolean;
   is_read: boolean;
   created_at: string;
@@ -46,7 +47,7 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
     return (
       <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
         <EnvelopeReveal
-          senderName={selectedMessage.is_anonymous ? "Anonymous" : (selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone")}
+          senderName={selectedMessage.is_anonymous ? "Anonymous" : (selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone")}
           content={selectedMessage.content || ""}
           original_message_id={selectedMessage.id}
           sender_id={selectedMessage.is_anonymous ? null : selectedMessage.sender_id}
@@ -125,7 +126,7 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
                   </div>
                   <div>
                     <p className="font-medium text-foreground">
-                      From: {message.is_anonymous ? "Anonymous" : (message.sender_full_name || message.sender_username || "Someone")}
+                      From: {message.is_anonymous ? "Anonymous" : (message.sender_name || message.sender_full_name || message.sender_username || "Someone")}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(message.created_at).toLocaleDateString()}

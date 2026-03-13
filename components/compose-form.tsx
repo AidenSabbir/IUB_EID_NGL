@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { CheckCircle2, Send, Loader2 } from "lucide-react";
 
@@ -21,6 +22,7 @@ interface ComposeFormProps {
 
 export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   const [content, setContent] = useState("");
+  const [senderName, setSenderName] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -53,6 +55,12 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       return;
     }
 
+    if (!isAnonymous && !senderName.trim()) {
+      setError("Please enter your name");
+      setIsSubmitting(false);
+      return;
+    }
+
     if (senderId && senderId === recipient.id) {
       setError("You can't send a message to yourself.");
       setIsSubmitting(false);
@@ -62,7 +70,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
     try {
       const { error: submitError } = await supabase.from("messages").insert({
         recipient_id: recipient.id,
-        sender_id: isAnonymous ? null : senderId,
+        sender_name: isAnonymous ? null : senderName.trim(),
         content: content.trim(),
         is_anonymous: isAnonymous,
       });
@@ -71,9 +79,10 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
 
       setIsSuccess(true);
       setContent("");
+      setSenderName("");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Failed to send message. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to send message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -168,15 +177,24 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         <Switch
           checked={isAnonymous}
           onCheckedChange={setIsAnonymous}
-          disabled={!senderId || isSubmitting}
+          disabled={isSubmitting}
           className="data-[state=checked]:bg-emerald-500"
         />
       </div>
 
-      {!senderId && !isAnonymous && (
-        <p className="text-xs text-amber-700/80 text-center">
-          You must be logged in to send a public message.
-        </p>
+      {!isAnonymous && (
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-amber-950">
+            Your Name
+          </label>
+          <Input
+            value={senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+            placeholder="Enter your name"
+            disabled={isSubmitting}
+            className="bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950"
+          />
+        </div>
       )}
 
       <Button

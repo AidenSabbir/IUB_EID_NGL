@@ -10,7 +10,7 @@ export default function TestProfilePage() {
           full_name: "Test User",
           avatar_url: null,
         }}
-        isOwnProfile={true}
+        
       />
     </div>
   );

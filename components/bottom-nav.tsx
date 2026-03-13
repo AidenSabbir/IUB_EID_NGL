@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Mail, Search, User, Moon } from "lucide-react"
+import { Mail, User, Moon } from "lucide-react"
 import { useUnreadCount } from "@/hooks/use-unread-count"
 
 export function BottomNav() {
@@ -14,11 +14,6 @@ export function BottomNav() {
       name: "Inbox",
       href: "/inbox",
       icon: Mail,
-    },
-    {
-      name: "Search",
-      href: "/search",
-      icon: Search,
     },
     {
       name: "Profile",

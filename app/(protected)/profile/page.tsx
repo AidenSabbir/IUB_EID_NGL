@@ -24,7 +24,7 @@ async function ProfileDashboard() {
 
   return (
     <div className="flex flex-col items-center w-full max-w-md mx-auto space-y-4">
-      <ProfileCard profile={profile} isOwnProfile={true} />
+      <ProfileCard profile={profile} />
       <LogoutButton />
     </div>
   )
