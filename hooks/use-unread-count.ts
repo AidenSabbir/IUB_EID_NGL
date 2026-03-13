@@ -19,18 +19,14 @@ export function useUnreadCount() {
           return
         }
 
-        // Fetch unread count
-        const { count, error } = await supabase
-          .from("messages")
-          .select("*", { count: "exact", head: true })
-          .eq("recipient_id", userData.user.id)
-          .eq("is_read", false)
+        // Fetch unread count using RPC to bypass any strict RLS client issues
+        const { data: rpcCount, error } = await supabase.rpc("get_unread_count")
 
         if (error) {
           console.error("Error fetching unread count:", error)
           setUnreadCount(0)
         } else {
-          setUnreadCount(count || 0)
+          setUnreadCount(rpcCount || 0)
         }
       } catch (error) {
         console.error("Failed to fetch unread count:", error)
