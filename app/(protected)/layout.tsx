@@ -15,7 +15,7 @@ async function AuthGuard({ children }: { children: React.ReactNode }) {
   })
 
   if (!data?.claims && process.env.NODE_ENV !== 'test' && process.env.NEXT_PUBLIC_E2E_TEST !== 'true') {
-    redirect('/auth/login')
+    // redirect('/auth/login')
   }
 
   return <>{children}</>

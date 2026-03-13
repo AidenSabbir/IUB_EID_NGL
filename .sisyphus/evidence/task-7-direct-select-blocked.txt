@@ -1,1 +1,19 @@
-Direct select blocked.
+Task 7 QA Scenario 3: Direct SELECT Blocked on Messages Table
+========================================
+
+Test: Attempt direct SELECT on messages table as authenticated user
+
+Query Executed:
+SET LOCAL role authenticated;
+SET LOCAL request.jwt.claims TO '{"sub": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"}';
+SELECT id, sender_id, recipient_id, content 
+FROM messages 
+WHERE recipient_id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
+LIMIT 1;
+
+Result:
+ERROR: 42501: permission denied for table messages
+
+✅ PASS: Direct SELECT is blocked for authenticated role
+✅ PASS: Users MUST use get_inbox_messages() RPC for read access
+✅ PASS: RLS enforcement working correctly (SELECT privilege revoked)

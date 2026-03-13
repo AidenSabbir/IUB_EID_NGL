@@ -1,0 +1,33 @@
+import { createClient } from "@/lib/supabase/server";
+import { InboxClient } from "@/components/inbox";
+
+export default async function InboxPage() {
+  const supabase = await createClient();
+
+  // Fetch unlock time
+  const { data: settingsData } = await supabase
+    .from("app_settings")
+    .select("value")
+    .eq("key", "eid_unlock_time")
+    .single();
+
+  const unlockTimeStr = settingsData?.value || "2026-03-30T12:00:00Z";
+  const unlockTime = new Date(unlockTimeStr).getTime();
+
+  // Fetch messages
+  const { data: messages, error } = await supabase.rpc("get_inbox_messages");
+
+  if (error) {
+    console.error("Error fetching inbox messages:", error);
+  }
+
+  return (
+    <div className="flex flex-col h-full w-full max-w-3xl mx-auto p-4 md:p-6 space-y-6">
+      <h1 className="text-3xl font-serif font-bold text-primary">Your Inbox</h1>
+      <InboxClient 
+        initialMessages={messages || []} 
+        unlockTime={unlockTime} 
+      />
+    </div>
+  );
+}

@@ -1,0 +1,24 @@
+Task 7 QA Scenario 2: Inbox RPC Content Lock Test
+========================================
+
+Test Setup:
+- Set unlock time to future: NOW() + 1 day
+- Created test sender: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa (username: testsender)
+- Created test recipient: bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb (username: testrecipient)
+- Inserted test message with content: "Secret Eid greeting that should be locked"
+
+Test Execution:
+Called get_inbox_messages() as recipient (bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb)
+
+Result:
+{
+  "id": "ec416302-d637-4b2e-b62c-38b4ab640e4c",
+  "sender_username": "sender",
+  "is_anonymous": false,
+  "content": null,           ← CORRECTLY LOCKED (NULL)
+  "is_unlocked": false        ← CORRECTLY SHOWS LOCKED STATE
+}
+
+✅ PASS: Content is NULL when NOW() < unlock_time
+✅ PASS: is_unlocked flag correctly returns false
+✅ PASS: Sender metadata (username) is still visible for non-anonymous messages
