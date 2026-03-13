@@ -20,7 +20,7 @@ export default async function SendMessagePage({
   const { data: recipientProfile } = await supabase
     .from("profiles")
     .select("id, username, full_name, avatar_url")
-    .eq("username", username)
+    .ilike("username", username)
     .single();
 
   if (!recipientProfile) {

@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { data: profile } = await supabase
     .from("profiles")
     .select("id, username, full_name")
-    .eq("username", username)
+    .ilike("username", username)
     .single();
 
   if (!profile) {
@@ -52,7 +52,7 @@ async function ProfileData({ paramsPromise }: { paramsPromise: Promise<{ usernam
   const { data: profile } = await supabase
     .from("profiles")
     .select("id, username, full_name, avatar_url")
-    .eq("username", username)
+    .ilike("username", username)
     .single();
 
   if (!profile) {
