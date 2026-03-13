@@ -1,0 +1,4 @@
+    --primary: 33 35% 53%;           /* #B38B59 gold */
+    --accent: 33 35% 53%;
+    --border: 33 35% 53%;            /* gold borders */
+    --ring: 33 35% 53%;
