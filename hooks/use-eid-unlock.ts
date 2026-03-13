@@ -8,7 +8,7 @@ interface UseEidUnlockReturn {
 }
 
 /**
- * Hook to poll for Eid unlock status every 30 seconds.
+ * Hook to poll for Eid unlock status every second.
  * Accepts an unlockTime (Date object or ISO string) and returns
  * isUnlocked boolean and timeRemaining in milliseconds.
  */
@@ -35,7 +35,7 @@ export function useEidUnlock(unlockTime: Date | string): UseEidUnlockReturn {
       setTimeRemaining(unlockTimeMs - currentTime);
     }
 
-    // Poll every 30 seconds
+    // Poll every 1 second for smooth countdown
     const interval = setInterval(() => {
       const currentTime = Date.now();
       if (currentTime >= unlockTimeMs) {
@@ -44,7 +44,7 @@ export function useEidUnlock(unlockTime: Date | string): UseEidUnlockReturn {
       } else {
         setTimeRemaining(Math.max(0, unlockTimeMs - currentTime));
       }
-    }, 30000); // 30 seconds
+    }, 1000); // 1 second
 
     return () => clearInterval(interval);
   }, [unlockTimeMs]);
