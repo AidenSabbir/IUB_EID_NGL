@@ -37,7 +37,7 @@ export default function ProtectedLayout({
               <h1 className="font-serif text-2xl font-semibold text-primary">Eid Moon</h1>
             </header>
             
-            <main className="flex-1 overflow-y-auto pb-16 md:pb-0 relative bg-background">
+            <main className="flex-1 overflow-y-auto pb-24 md:pb-0 relative bg-background">
               {children}
             </main>
           </div>

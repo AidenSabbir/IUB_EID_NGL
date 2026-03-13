@@ -70,7 +70,7 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
               Your messages are sealed until Eid. The countdown has begun!
             </p>
             
-            <div className="flex gap-4 mt-4">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-4">
               <TimeUnit value={days} label="Days" />
               <TimeUnit value={hours} label="Hours" />
               <TimeUnit value={minutes} label="Mins" />
