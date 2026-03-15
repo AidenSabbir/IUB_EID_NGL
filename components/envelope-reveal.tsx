@@ -46,26 +46,26 @@ export function EnvelopeReveal({
           >
             <button
               onClick={handleClose}
-              className="inline-block px-4 py-2 text-sm text-muted-foreground hover:text-primary transition-colors border border-primary/20 rounded hover:border-primary/40 bg-background/50 backdrop-blur-sm"
+              className="inline-block px-4 py-2 text-sm text-foreground hover:text-primary transition-colors border border-primary/40 rounded hover:border-primary/60 bg-background/80 backdrop-blur-sm font-medium"
             >
               ← Back to Inbox
             </button>
           </motion.div>
 
           <div
-            className="bg-[#fdfbf7] rounded-sm border border-primary/20 shadow-2xl overflow-hidden relative"
+            className="bg-[#fdfbf7] rounded-sm border border-primary/40 shadow-2xl overflow-hidden relative"
           >
             {/* Decorative top border */}
-            <div className="h-2 bg-gradient-to-r from-primary/40 via-primary to-primary/40" />
+            <div className="h-2 bg-gradient-to-r from-primary/70 via-primary to-primary/70" />
 
             {/* Background texture pattern (subtle) */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+            <div className="absolute inset-0 opacity-[0.06] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
             <div className="p-8 md:p-12 relative z-10">
               <div
-                className="mb-8 pb-6 border-b border-primary/10 flex flex-col items-center text-center"
+                className="mb-8 pb-6 border-b border-primary/30 flex flex-col items-center text-center"
               >
-                <Sparkles className="w-6 h-6 text-primary/40 mb-4" />
+                <Sparkles className="w-6 h-6 text-primary/70 mb-4" />
                 <p className="text-sm text-muted-foreground mb-1 uppercase tracking-widest font-serif">From</p>
                 <h3 className="text-2xl font-serif text-primary font-semibold">
                   {senderName}
@@ -99,10 +99,10 @@ export function EnvelopeReveal({
                         date={createdAt ? new Date(createdAt).toLocaleDateString([], { dateStyle: 'medium' }) : ''} 
                         className="w-full max-w-md mx-auto"
                       />
-                      <div className="text-center text-primary/60 mt-4 flex flex-col items-center">
-                        <Lock className="w-5 h-5 mb-2 opacity-80" />
-                        <p className="text-sm font-serif tracking-wide text-primary/80">Content Sealed until Eid</p>
-                        <p className="text-xs text-primary/50 text-center max-w-xs mt-2">
+                      <div className="text-center text-primary/80 mt-4 flex flex-col items-center">
+                        <Lock className="w-5 h-5 mb-2" />
+                        <p className="text-sm font-serif tracking-wide text-primary/90 font-medium">Content Sealed until Eid</p>
+                        <p className="text-xs text-primary/80 text-center max-w-xs mt-2">
                           Come back on Eid to reveal the full message and the sender&apos;s identity.
                         </p>
                       </div>
@@ -142,9 +142,9 @@ export function EnvelopeReveal({
               </div>
 
               <div
-                className="pt-8 border-t border-primary/10 flex justify-center"
+                className="pt-8 border-t border-primary/30 flex justify-center"
               >
-                <div className="text-primary/30 text-2xl">✦</div>
+                <div className="text-primary/70 text-2xl">✦</div>
               </div>
             </div>
           </div>

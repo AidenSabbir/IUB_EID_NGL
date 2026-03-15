@@ -22,7 +22,7 @@ export function DecorativeLights() {
   });
 
   return (
-    <div className="absolute top-16 md:top-0 left-0 w-full overflow-hidden pointer-events-none z-50 opacity-80 h-32 md:h-40">
+    <div className="absolute top-16 md:top-0 left-0 w-full overflow-hidden pointer-events-none z-0 h-32 md:h-40">
       <svg
         viewBox="0 0 1200 120"
         preserveAspectRatio="xMidYMin slice"

@@ -14,12 +14,12 @@ export function EidDecorations() {
   if (!mounted) return null;
 
   const stars = [
-    { top: "15%", left: "10%", size: 32, delay: 0, color: "text-amber-400/60" },
-    { top: "25%", left: "80%", size: 40, delay: 1, color: "text-emerald-400/50" },
-    { top: "45%", left: "20%", size: 28, delay: 2, color: "text-indigo-400/50" },
-    { top: "55%", left: "75%", size: 36, delay: 0.5, color: "text-amber-400/50" },
-    { top: "75%", left: "15%", size: 44, delay: 1.5, color: "text-emerald-400/60" },
-    { top: "85%", left: "85%", size: 32, delay: 2.5, color: "text-indigo-400/50" },
+    { top: "15%", left: "10%", size: 32, delay: 0, color: "text-amber-400/90" },
+    { top: "25%", left: "80%", size: 40, delay: 1, color: "text-emerald-400/80" },
+    { top: "45%", left: "20%", size: 28, delay: 2, color: "text-indigo-400/80" },
+    { top: "55%", left: "75%", size: 36, delay: 0.5, color: "text-amber-400/80" },
+    { top: "75%", left: "15%", size: 44, delay: 1.5, color: "text-emerald-400/90" },
+    { top: "85%", left: "85%", size: 32, delay: 2.5, color: "text-indigo-400/80" },
   ];
 
   const sparkles = [
@@ -29,11 +29,11 @@ export function EidDecorations() {
   ];
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-40">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       
       {/* Hanging Crescent Moon */}
       <motion.div
-        className="absolute top-16 md:top-0 right-[10%] md:right-[15%] text-amber-500/80 origin-top flex flex-col items-center z-50"
+        className="absolute top-16 md:top-0 right-[10%] md:right-[15%] text-amber-500 origin-top flex flex-col items-center z-0"
         animate={{ 
           rotate: [-6, 6, -6],
         }}
@@ -44,7 +44,7 @@ export function EidDecorations() {
         }}
       >
         {/* The Chain */}
-        <div className="w-[2px] h-24 md:h-32 bg-gradient-to-b from-amber-500/0 via-amber-500/50 to-amber-500/80 rounded-full" />
+        <div className="w-[2px] h-24 md:h-32 bg-gradient-to-b from-amber-500/0 via-amber-500/80 to-amber-500 rounded-full" />
         
         {/* The Moon SVG */}
         <svg 
@@ -52,7 +52,7 @@ export function EidDecorations() {
           height="120" 
           viewBox="0 0 24 24" 
           fill="currentColor" 
-          className="mt-[-10px] drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+          className="mt-[-10px] drop-shadow-[0_0_15px_rgba(245,158,11,0.8)]"
         >
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           
@@ -68,7 +68,7 @@ export function EidDecorations() {
           className={`absolute ${star.color}`}
           style={{ top: star.top, left: star.left }}
           animate={{
-            opacity: [0.4, 0.9, 0.4],
+            opacity: [0.7, 1, 0.7],
             scale: [1, 1.25, 1],
             rotate: [0, 45, 0],
             y: [0, -10, 0],
@@ -88,10 +88,10 @@ export function EidDecorations() {
       {sparkles.map((sparkle, i) => (
         <motion.div
           key={`sparkle-${i}`}
-          className="absolute text-amber-400/80"
+          className="absolute text-amber-400"
           style={{ top: sparkle.top, left: sparkle.left }}
           animate={{
-            opacity: [0, 0.8, 0],
+            opacity: [0.3, 1, 0.3],
             scale: [0.8, 1.6, 0.8],
             rotate: [0, 180, 360],
           }}
@@ -108,9 +108,9 @@ export function EidDecorations() {
 
       {/* Prominent Mosque at Bottom */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 w-full flex justify-center text-amber-600/30 dark:text-amber-500/20 pointer-events-none mix-blend-multiply dark:mix-blend-screen"
+        className="absolute bottom-0 left-0 right-0 w-full flex justify-center text-amber-600 dark:text-amber-500 pointer-events-none"
         animate={{
-          opacity: [0.7, 1, 0.7],
+          opacity: [0.9, 1, 0.9],
         }}
         transition={{
           duration: 10,
@@ -166,8 +166,8 @@ export function EidDecorations() {
           <circle cx="70" cy="11.5" r="0.5" />
 
           {/* Arches on the base of domes */}
-          <path d="M 40 38 L 40 30 A 5 5 0 0 1 50 30 L 50 38" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-          <path d="M 50 38 L 50 30 A 5 5 0 0 1 60 30 L 60 38" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+          <path d="M 40 38 L 40 30 A 5 5 0 0 1 50 30 L 50 38" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.8" />
+          <path d="M 50 38 L 50 30 A 5 5 0 0 1 60 30 L 60 38" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.8" />
           
         </svg>
       </motion.div>

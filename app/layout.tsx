@@ -47,11 +47,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body
-        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans`}
+        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
-        <EidDecorations />
-        <DecorativeLights />
-        {children}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <EidDecorations />
+          <DecorativeLights />
+        </div>
+        <div className="relative z-10 flex flex-col flex-1 h-full">
+          {children}
+        </div>
       </body>
     </html>
   );
