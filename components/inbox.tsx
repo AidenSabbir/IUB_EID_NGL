@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { EnvelopeReveal } from "@/components/envelope-reveal";
 import { useEidUnlock } from "@/hooks/use-eid-unlock";
-
+import { useUnreadCount } from "@/hooks/use-unread-count"
 interface Message {
   id: string;
   sender_id: string | null;
@@ -33,7 +33,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [copied, setCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
-
+  const { unreadCount } = useUnreadCount()
   const { isUnlocked, timeRemaining } = useEidUnlock(new Date(unlockTime));
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
       )}
 
       {!isUnlocked && (
-        <Card className="bg-primary/40 border-primary/30 shadow-md">
+        <Card className="bg-primary/40 border-primary/30 backdrop-blur-sm shadow-md">
           <CardContent className="p-2 flex flex-col items-center justify-center space-y-2">
             <Lock className="w-12 h-12 text-primary" />
             <h2 className="text-2xl font-serif font-semibold text-foreground text-center">
@@ -135,13 +135,23 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
           </div>
         </div>
       </div>
-
+      <div className="flex items-center space-x-3 relative">
+        <h1 className="text-3xl font-serif font-bold text-primary">
+          Your Inbox
+        </h1>
+        {unreadCount > 0 ? (
+          <span className="inline-flex items-center justify-center min-w-6 h-6 px-2 bg-primary text-primary-foreground text-sm font-semibold rounded-full shadow-sm">
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </span>
+        ) : null}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
         {initialMessages.length === 0 ? (
           <div className="col-span-full text-center py-12 text-muted-foreground">
             No messages yet. Share your link to receive Eid wishes!
           </div>
         ) : (
+
           initialMessages.map((message) => (
             <motion.div
               key={message.id}
@@ -194,9 +204,9 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
                 </div>
 
                 {/* Top Flap (Closed) */}
-                <div className="absolute top-0 left-0 right-0 h-[65%]  origin-top z-30">
+                <div className="absolute top-0 left-0 right-0 h-[65%]  drop-shadow-[0_3px_4px_rgba(0,0,0,0.3)] origin-top z-30">
                   <div
-                    className="absolute inset-0 bg-[#fdfbf7] drop-shadow-md border-b border-primary/10"
+                    className="absolute inset-0 bg-gradient-to-b from-[#fdfbf7] to-[#eee9dc]  border-b border-primary/20"
                     style={{ clipPath: 'polygon(0 0, 50% 100%, 100% 0)' }}
                   />
 
