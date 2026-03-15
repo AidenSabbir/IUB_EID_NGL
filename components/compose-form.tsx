@@ -2,13 +2,21 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { createClient } from "@/lib/supabase/client";
-import { CheckCircle2, Send, Loader2 } from "lucide-react";
+import { CheckCircle2, Send, Loader2, Maximize2 } from "lucide-react";
+import { EID_CARDS } from "@/lib/eid-cards";
+import { STAMPS } from "@/lib/stamps";
+import { EidCard } from "@/components/eid-card";
+import { PostcardPreview } from "@/components/postcard-preview";
+import { cn } from "@/lib/utils";
 
 interface ComposeFormProps {
   recipient: {
@@ -21,7 +29,11 @@ interface ComposeFormProps {
 }
 
 export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
+  const [selectedCardId, setSelectedCardId] = useState<string>(EID_CARDS[0].id);
+  const [selectedStampId, setSelectedStampId] = useState<string>(STAMPS[0].id);
+  const [previewTab, setPreviewTab] = useState<"envelope" | "card">("envelope");
   const [content, setContent] = useState("");
+  const [fontSize, setFontSize] = useState<number>(24);
   const [senderName, setSenderName] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +42,9 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
 
   const supabase = createClient();
   const router = useRouter();
-  const MAX_CHARS = 280;
+  const MAX_CHARS = 250;
+
+  const selectedCard = EID_CARDS.find((c) => c.id === selectedCardId) || EID_CARDS[0];
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length <= MAX_CHARS) {
@@ -68,10 +82,18 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
     }
 
     try {
+      const payload = JSON.stringify({
+        type: 'eid-card',
+        cardId: selectedCard.id,
+        stampId: selectedStampId,
+        text: content.trim(),
+        fontSize: `${fontSize}px`
+      });
+
       const { error: submitError } = await supabase.from("messages").insert({
         recipient_id: recipient.id,
         sender_name: isAnonymous ? null : senderName.trim(),
-        content: content.trim(),
+        content: payload,
         is_anonymous: isAnonymous,
       });
 
@@ -95,16 +117,16 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
         <h3 className="text-2xl font-serif text-emerald-950 font-medium">
-          Message Sent!
+          Card Sent Successfully!
         </h3>
         <p className="text-emerald-800/80">
-          Your message has been delivered to @{recipient.username}.
+          Your Eid Card has been delivered to @{recipient.username}.
         </p>
         <Button
           onClick={() => setIsSuccess(false)}
           className="mt-4 w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white"
         >
-          Send Another Message
+          Send Another Card
         </Button>
       </div>
     );
@@ -116,27 +138,165 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col space-y-4 w-full"
+      className="flex flex-col space-y-6 w-full"
     >
-      <div className="space-y-2">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium text-amber-950">Live Preview</Label>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
+                <Maximize2 className="w-3 h-3 mr-1.5" />
+                Full View
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
+              <DialogTitle className="sr-only">Full View Preview</DialogTitle>
+              <div className="w-full flex justify-center">
+                {previewTab === "envelope" ? (
+                  <PostcardPreview
+                    stampId={selectedStampId}
+                    senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
+                    date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    className="shadow-2xl"
+                  />
+                ) : (
+                  <EidCard
+                    cardConfig={selectedCard}
+                    message={content}
+                    fontSize={`${fontSize}px`}
+                    className="shadow-2xl"
+                  />
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
+          <div className="flex bg-amber-100/50 p-1 rounded-lg w-full max-w-[240px] mb-4">
+            <button
+              type="button"
+              onClick={() => setPreviewTab("envelope")}
+              className={cn("flex-1 text-xs py-1.5 rounded-md transition-colors", previewTab === "envelope" ? "bg-white shadow-sm text-amber-900 font-medium" : "text-amber-700 hover:text-amber-900")}
+            >
+              Postcard
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreviewTab("card")}
+              className={cn("flex-1 text-xs py-1.5 rounded-md transition-colors", previewTab === "card" ? "bg-white shadow-sm text-amber-900 font-medium" : "text-amber-700 hover:text-amber-900")}
+            >
+              Card Inside
+            </button>
+          </div>
+          <div className="w-full max-w-[350px] flex justify-center">
+            {previewTab === "envelope" ? (
+              <PostcardPreview
+                stampId={selectedStampId}
+                senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
+                date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                className="shadow-md"
+              />
+            ) : (
+              <EidCard
+                cardConfig={selectedCard}
+                message={content}
+                fontSize={`${fontSize}px`}
+                className="shadow-md"
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-amber-950">1. Choose a Postcard (Front)</Label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {STAMPS.map((stamp) => (
+            <button
+              key={stamp.id}
+              type="button"
+              onClick={() => setSelectedStampId(stamp.id)}
+              className={cn(
+                "relative aspect-[3/2] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
+                selectedStampId === stamp.id
+                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
+                  : "border-transparent hover:border-amber-200"
+              )}
+            >
+              <Image
+                src={stamp.image}
+                alt={`Stamp ${stamp.id}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 33vw, 20vw"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-amber-950">2. Choose a Card Design (Inside)</Label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {EID_CARDS.map((card) => (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => setSelectedCardId(card.id)}
+              className={cn(
+                "relative aspect-[4/5] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
+                selectedCardId === card.id
+                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
+                  : "border-transparent hover:border-amber-200"
+              )}
+            >
+              <Image
+                src={card.image}
+                alt={`Template ${card.id}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 25vw, 20vw"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-amber-950">3. Write Your Message</Label>
         <div className="relative">
           <Textarea
             value={content}
             onChange={handleContentChange}
-            placeholder="Write something kind..."
-            className="min-h-[140px] resize-none bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950 text-base p-4 pb-8"
+            placeholder="Write your heartfelt Eid wishes here..."
+            className="min-h-[120px] resize-none bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950 text-base p-4 pb-8"
             disabled={isSubmitting}
             required
             maxLength={MAX_CHARS}
           />
           <div
-            className={`absolute bottom-3 right-3 text-xs font-medium ${
-              charCount >= MAX_CHARS ? "text-red-500" : "text-amber-600/70"
-            }`}
+            className={`absolute bottom-3 right-3 text-xs font-medium ${charCount >= MAX_CHARS ? "text-red-500" : "text-amber-600/70"
+              }`}
           >
             {charCount}/{MAX_CHARS}
           </div>
         </div>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium text-amber-950">4. Text Size</Label>
+          <span className="text-xs text-amber-700/80">{fontSize}px</span>
+        </div>
+        <Slider
+          value={[fontSize]}
+          onValueChange={(vals) => setFontSize(vals[0])}
+          min={12}
+          max={48}
+          step={1}
+          className="py-2"
+        />
       </div>
 
       {error && (
@@ -189,7 +349,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         ) : (
           <Send className="mr-2 h-5 w-5" />
         )}
-        {isSubmitting ? "Sending..." : "Send Message"}
+        {isSubmitting ? "Sending..." : "Send Card"}
       </Button>
     </form>
   );

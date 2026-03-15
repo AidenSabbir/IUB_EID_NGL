@@ -12,6 +12,7 @@ export default {
     extend: {
       fontFamily: {
         serif: ["var(--font-serif)"],
+        "great-vibes": ["var(--font-great-vibes)"],
       },
       colors: {
         background: "hsl(var(--background))",

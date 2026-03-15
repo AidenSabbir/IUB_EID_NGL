@@ -29,11 +29,11 @@ export function EidDecorations() {
   ];
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-40">
       
       {/* Hanging Crescent Moon */}
       <motion.div
-        className="absolute top-0 right-[10%] md:right-[15%] text-amber-500/80 origin-top flex flex-col items-center"
+        className="absolute top-16 md:top-0 right-[10%] md:right-[15%] text-amber-500/80 origin-top flex flex-col items-center z-50"
         animate={{ 
           rotate: [-6, 6, -6],
         }}

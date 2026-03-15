@@ -30,8 +30,8 @@ export async function generateMetadata({
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 
-  const title = `${profile.full_name} | Eid Moon`;
-  const description = `Send Eid wishes to ${profile.full_name}`;
+  const title = `****** | Eid Moon`;
+  const description = `Send an anonymous Eid wish`;
   const pageUrl = `${defaultUrl}/u/${username}`;
 
   return {
@@ -64,7 +64,7 @@ async function ProfileData({ paramsPromise }: { paramsPromise: Promise<{ usernam
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
-      <ProfileCard profile={profile} />
+      <ProfileCard profile={profile} isOwner={user?.id === profile.id} />
       
       {user?.id !== profile.id ? (
         <div className="bg-card border-border rounded-xl shadow-sm overflow-hidden p-6">
@@ -94,10 +94,12 @@ export default function ProfilePage({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
-        <ProfileData paramsPromise={params} />
-      </Suspense>
-    </div>
+    <>
+      <div className="flex min-h-screen flex-col items-center justify-center p-4">
+        <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
+          <ProfileData paramsPromise={params} />
+        </Suspense>
+      </div>
+    </>
   );
 }
