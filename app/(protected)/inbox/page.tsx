@@ -30,7 +30,6 @@ export default async function InboxPage() {
 
   return (
     <div className="flex flex-col w-full max-w-3xl mx-auto p-12 md:p-6 space-y-6">
-      <h1 className="text-3xl font-serif font-bold text-primary">Your Inbox</h1>
       <InboxClient
         initialMessages={messages || []}
         unlockTime={unlockTime}

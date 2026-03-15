@@ -68,7 +68,7 @@ async function ProfileData({ paramsPromise }: { paramsPromise: Promise<{ usernam
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <ProfileCard profile={profile} isOwner={user?.id === profile.id} />
-      
+
       {user?.id !== profile.id ? (
         <div className="bg-card border-border rounded-xl shadow-sm overflow-hidden p-6">
           <div className="text-center mb-6">
@@ -98,18 +98,6 @@ export default function ProfilePage({
 }) {
   return (
     <>
-      <div className="fixed top-4 left-4 z-50">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          asChild 
-          className="rounded-full bg-background/50 backdrop-blur-sm border border-border/40 hover:bg-background/80 transition-all"
-        >
-          <Link href="/">
-            <Home className="w-5 h-5 text-primary" />
-          </Link>
-        </Button>
-      </div>
       <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center p-4 pb-32">
         <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
           <ProfileData paramsPromise={params} />

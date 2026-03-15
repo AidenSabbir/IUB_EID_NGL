@@ -43,7 +43,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
 
   const supabase = createClient();
   const router = useRouter();
-  const MAX_CHARS = 250;
+  const MAX_CHARS = 120;
 
   const selectedCard = EID_CARDS.find((c) => c.id === selectedCardId) || EID_CARDS[0];
 
