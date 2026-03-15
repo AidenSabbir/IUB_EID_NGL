@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileCard } from "@/components/profile-card";
 import { ComposeForm } from "@/components/compose-form";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -65,7 +68,7 @@ async function ProfileData({ paramsPromise }: { paramsPromise: Promise<{ usernam
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <ProfileCard profile={profile} isOwner={user?.id === profile.id} />
-      
+
       {user?.id !== profile.id ? (
         <div className="bg-card border-border rounded-xl shadow-sm overflow-hidden p-6">
           <div className="text-center mb-6">
@@ -95,7 +98,7 @@ export default function ProfilePage({
 }) {
   return (
     <>
-      <div className="flex min-h-screen flex-col items-center justify-center p-4">
+      <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center p-4 pb-32">
         <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
           <ProfileData paramsPromise={params} />
         </Suspense>

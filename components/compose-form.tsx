@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -11,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { createClient } from "@/lib/supabase/client";
-import { CheckCircle2, Send, Loader2, Maximize2 } from "lucide-react";
+import { CheckCircle2, Send, Loader2, Maximize2, ShieldCheck, UserCircle } from "lucide-react";
 import { EID_CARDS } from "@/lib/eid-cards";
 import { STAMPS } from "@/lib/stamps";
 import { EidCard } from "@/components/eid-card";
@@ -42,7 +43,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
 
   const supabase = createClient();
   const router = useRouter();
-  const MAX_CHARS = 250;
+  const MAX_CHARS = 120;
 
   const selectedCard = EID_CARDS.find((c) => c.id === selectedCardId) || EID_CARDS[0];
 
@@ -112,7 +113,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
 
   if (isSuccess) {
     return (
-      <div className="flex flex-col items-center justify-center space-y-4 p-8 text-center bg-white rounded-xl border border-emerald-100 shadow-sm">
+      <div className="flex flex-col items-center justify-center p-6 text-center bg-white rounded-xl border border-emerald-100 shadow-sm space-y-4">
         <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-2">
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
@@ -122,12 +123,33 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         <p className="text-emerald-800/80">
           Your Eid Card has been delivered to @{recipient.username}.
         </p>
-        <Button
-          onClick={() => setIsSuccess(false)}
-          className="mt-4 w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white"
-        >
-          Send Another Card
-        </Button>
+        
+        {senderId ? (
+          <Button
+            onClick={() => setIsSuccess(false)}
+            className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl py-6"
+          >
+            Send Another Card
+          </Button>
+        ) : (
+          <div className="w-full pt-4 space-y-4 border-t border-emerald-50">
+            <div className="space-y-2">
+              <h4 className="font-serif font-semibold text-primary">Receive your Eid Wishes</h4>
+              <p className="text-sm text-muted-foreground">
+                Sign up and share your link to get anonymous messages from your friends!
+              </p>
+            </div>
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl py-6">
+              <Link href="/auth/login">Sign up here</Link>
+            </Button>
+            <button
+              onClick={() => setIsSuccess(false)}
+              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+            >
+              Send another anonymous wish
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -140,9 +162,141 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       onSubmit={handleSubmit}
       className="flex flex-col space-y-6 w-full"
     >
+      <div className="flex items-center justify-between p-5 bg-gradient-to-br from-amber-50 to-white rounded-2xl border-2 border-amber-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+        <div className="flex items-start gap-4">
+          <div className={cn(
+            "p-2.5 rounded-xl transition-colors shrink-0",
+            isAnonymous ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"
+          )}>
+            {isAnonymous ? <ShieldCheck className="w-6 h-6" /> : <UserCircle className="w-6 h-6" />}
+          </div>
+          <div className="space-y-1">
+            <label className="text-base font-serif font-semibold text-amber-950">
+              1. Stay Anonymous
+            </label>
+            <p className="text-sm text-amber-800/70 leading-tight">
+              {isAnonymous
+                ? "Your identity will be hidden from everyone."
+                : "Your name will be visible to the recipient."}
+            </p>
+          </div>
+        </div>
+        <Switch
+          checked={isAnonymous}
+          onCheckedChange={setIsAnonymous}
+          disabled={isSubmitting}
+          className="data-[state=checked]:bg-emerald-500 scale-110"
+        />
+      </div>
+
+      {!isAnonymous && (
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-amber-950">
+            Your Name
+          </label>
+          <Input
+            value={senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+            placeholder="Enter your name"
+            disabled={isSubmitting}
+            className="bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950"
+          />
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-amber-950">2. Choose a Postcard (Front)</Label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {STAMPS.map((stamp) => (
+            <button
+              key={stamp.id}
+              type="button"
+              onClick={() => setSelectedStampId(stamp.id)}
+              className={cn(
+                "relative aspect-[3/2] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
+                selectedStampId === stamp.id
+                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
+                  : "border-transparent hover:border-amber-200"
+              )}
+            >
+              <Image
+                src={stamp.image}
+                alt={`Stamp ${stamp.id}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 33vw, 20vw"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-amber-950">3. Choose a Card Design (Inside)</Label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {EID_CARDS.map((card) => (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => setSelectedCardId(card.id)}
+              className={cn(
+                "relative aspect-[4/5] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
+                selectedCardId === card.id
+                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
+                  : "border-transparent hover:border-amber-200"
+              )}
+            >
+              <Image
+                src={card.image}
+                alt={`Template ${card.id}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 25vw, 20vw"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium text-amber-950">4. Write Your Message</Label>
+        <div className="relative">
+          <Textarea
+            value={content}
+            onChange={handleContentChange}
+            placeholder="Write your heartfelt Eid wishes here..."
+            className="min-h-[120px] resize-none bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950 text-base p-4 pb-8"
+            disabled={isSubmitting}
+            required
+            maxLength={MAX_CHARS}
+          />
+          <div
+            className={`absolute bottom-3 right-3 text-xs font-medium ${charCount >= MAX_CHARS ? "text-red-500" : "text-amber-600/70"
+              }`}
+          >
+            {charCount}/{MAX_CHARS}
+          </div>
+        </div>
+      </div>
+
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-medium text-amber-950">Live Preview</Label>
+          <Label className="text-sm font-medium text-amber-950">5. Text Size</Label>
+          <span className="text-xs text-amber-700/80">{fontSize}px</span>
+        </div>
+        <Slider
+          value={[fontSize]}
+          onValueChange={(vals) => setFontSize(vals[0])}
+          min={12}
+          max={48}
+          step={1}
+          className="py-2"
+        />
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium text-amber-950">6. Live Preview</Label>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
@@ -209,133 +363,9 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-amber-950">1. Choose a Postcard (Front)</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {STAMPS.map((stamp) => (
-            <button
-              key={stamp.id}
-              type="button"
-              onClick={() => setSelectedStampId(stamp.id)}
-              className={cn(
-                "relative aspect-[3/2] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
-                selectedStampId === stamp.id
-                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
-                  : "border-transparent hover:border-amber-200"
-              )}
-            >
-              <Image
-                src={stamp.image}
-                alt={`Stamp ${stamp.id}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 33vw, 20vw"
-              />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-amber-950">2. Choose a Card Design (Inside)</Label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {EID_CARDS.map((card) => (
-            <button
-              key={card.id}
-              type="button"
-              onClick={() => setSelectedCardId(card.id)}
-              className={cn(
-                "relative aspect-[4/5] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
-                selectedCardId === card.id
-                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
-                  : "border-transparent hover:border-amber-200"
-              )}
-            >
-              <Image
-                src={card.image}
-                alt={`Template ${card.id}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 25vw, 20vw"
-              />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-amber-950">3. Write Your Message</Label>
-        <div className="relative">
-          <Textarea
-            value={content}
-            onChange={handleContentChange}
-            placeholder="Write your heartfelt Eid wishes here..."
-            className="min-h-[120px] resize-none bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950 text-base p-4 pb-8"
-            disabled={isSubmitting}
-            required
-            maxLength={MAX_CHARS}
-          />
-          <div
-            className={`absolute bottom-3 right-3 text-xs font-medium ${charCount >= MAX_CHARS ? "text-red-500" : "text-amber-600/70"
-              }`}
-          >
-            {charCount}/{MAX_CHARS}
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label className="text-sm font-medium text-amber-950">4. Text Size</Label>
-          <span className="text-xs text-amber-700/80">{fontSize}px</span>
-        </div>
-        <Slider
-          value={[fontSize]}
-          onValueChange={(vals) => setFontSize(vals[0])}
-          min={12}
-          max={48}
-          step={1}
-          className="py-2"
-        />
-      </div>
-
       {error && (
         <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-md">
           {error}
-        </div>
-      )}
-
-      <div className="flex items-center justify-between p-4 bg-amber-50/50 rounded-lg border border-amber-100">
-        <div className="space-y-0.5">
-          <label className="text-sm font-medium text-amber-950">
-            Stay Anonymous
-          </label>
-          <p className="text-xs text-amber-700/80">
-            {isAnonymous
-              ? "Your identity will be hidden."
-              : "Your username will be shown."}
-          </p>
-        </div>
-        <Switch
-          checked={isAnonymous}
-          onCheckedChange={setIsAnonymous}
-          disabled={isSubmitting}
-          className="data-[state=checked]:bg-emerald-500"
-        />
-      </div>
-
-      {!isAnonymous && (
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-amber-950">
-            Your Name
-          </label>
-          <Input
-            value={senderName}
-            onChange={(e) => setSenderName(e.target.value)}
-            placeholder="Enter your name"
-            disabled={isSubmitting}
-            className="bg-amber-50/30 border-amber-200 focus-visible:ring-amber-500/30 focus-visible:border-amber-400 placeholder:text-amber-900/30 text-amber-950"
-          />
         </div>
       )}
 

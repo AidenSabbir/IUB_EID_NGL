@@ -21,12 +21,19 @@ export default async function InboxPage() {
     console.error("Error fetching inbox messages:", error);
   }
 
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", user?.id)
+    .single();
+
   return (
-    <div className="flex flex-col h-full w-full max-w-3xl mx-auto p-4 md:p-6 space-y-6">
-      <h1 className="text-3xl font-serif font-bold text-primary">Your Inbox</h1>
-      <InboxClient 
-        initialMessages={messages || []} 
-        unlockTime={unlockTime} 
+    <div className="flex flex-col w-full max-w-3xl mx-auto p-12 md:p-6 space-y-6">
+      <InboxClient
+        initialMessages={messages || []}
+        unlockTime={unlockTime}
+        username={profile?.username || ""}
       />
     </div>
   );

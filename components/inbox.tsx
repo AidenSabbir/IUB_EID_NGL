@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Lock, MailOpen } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Lock, MailOpen, Check, Copy, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { EnvelopeReveal } from "@/components/envelope-reveal";
 import { useEidUnlock } from "@/hooks/use-eid-unlock";
-
+import { useUnreadCount } from "@/hooks/use-unread-count"
 interface Message {
   id: string;
   sender_id: string | null;
@@ -26,55 +26,66 @@ interface Message {
 interface InboxClientProps {
   initialMessages: Message[];
   unlockTime: number;
+  username: string;
 }
 
-import { Sparkles } from "lucide-react";
-
-export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
+export function InboxClient({ initialMessages, unlockTime, username }: InboxClientProps) {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-
+  const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { unreadCount } = useUnreadCount()
   const { isUnlocked, timeRemaining } = useEidUnlock(new Date(unlockTime));
 
-  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleCopyLink = () => {
+    const url = `${window.location.origin}/u/${username}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const days = mounted ? Math.floor(timeRemaining / (1000 * 60 * 60 * 24)) : 0;
+  const hours = mounted ? Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) : 0;
+  const minutes = mounted ? Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60)) : 0;
+  const seconds = mounted ? Math.floor((timeRemaining % (1000 * 60)) / 1000) : 0;
 
   const handleEnvelopeClick = (message: Message) => {
     setSelectedMessage(message);
   };
 
-  if (selectedMessage) {
-    const rawSenderName = selectedMessage.is_anonymous
-      ? "Anonymous"
-      : (selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone");
-
-    const senderName = isUnlocked
-      ? rawSenderName
-      : (selectedMessage.is_anonymous ? "A********" : `${rawSenderName.charAt(0)}****`);
-
-    return (
-      <div className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md overflow-y-auto">
-        <EnvelopeReveal
-          senderName={senderName}
-          content={selectedMessage.content || ""}
-          original_message_id={selectedMessage.id}
-          sender_id={selectedMessage.is_anonymous ? null : selectedMessage.sender_id}
-          sender_username={selectedMessage.is_anonymous ? null : selectedMessage.sender_username}
-          onClose={() => setSelectedMessage(null)}
-          isUnlocked={isUnlocked}
-          createdAt={selectedMessage.created_at}
-        />
-      </div>
-    );
-  }
+  const selectedSenderName = selectedMessage ? (
+    isUnlocked
+      ? (selectedMessage.is_anonymous ? "Anonymous" : (selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone"))
+      : (selectedMessage.is_anonymous ? "A********" : `${(selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone").charAt(0)}****`)
+  ) : "";
 
   return (
     <div className="space-y-8">
+      {selectedMessage && (
+        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-transparent" onClick={() => setSelectedMessage(null)} />
+          <div className="relative z-10 w-full max-w-xl">
+            <EnvelopeReveal
+              senderName={selectedSenderName}
+              content={selectedMessage.content || ""}
+              original_message_id={selectedMessage.id}
+              sender_id={selectedMessage.is_anonymous ? null : selectedMessage.sender_id}
+              sender_username={selectedMessage.is_anonymous ? null : selectedMessage.sender_username}
+              onClose={() => setSelectedMessage(null)}
+              isUnlocked={isUnlocked}
+              createdAt={selectedMessage.created_at}
+            />
+          </div>
+        </div>
+      )}
+
       {!isUnlocked && (
-        <Card className="bg-primary/20 border-primary/30 shadow-md">
-          <CardContent className="p-6 flex flex-col items-center justify-center space-y-4">
-            <Lock className="w-12 h-12 text-primary mb-2" />
+        <Card className="bg-primary/40 border-primary/30 backdrop-blur-sm shadow-md">
+          <CardContent className="p-2 flex flex-col items-center justify-center space-y-2">
+            <Lock className="w-12 h-12 text-primary" />
             <h2 className="text-2xl font-serif font-semibold text-foreground text-center">
               Eid Messages Locked
             </h2>
@@ -103,12 +114,44 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
         </div>
       )}
 
+      <div className="flex flex-col items-center justify-center p-6 bg-card border border-primary/20 rounded-xl shadow-sm space-y-4">
+        <div className="text-center">
+          <h3 className="text-lg font-serif font-semibold text-primary">Share Your Profile</h3>
+          <p className="text-sm text-muted-foreground">Receive more Eid wishes from your friends!</p>
+        </div>
+        <div className="flex w-full max-w-sm items-center space-x-2">
+          <div className="relative flex-1">
+            <input
+              className="w-full px-3 py-2 text-sm bg-muted border border-primary/10 rounded-md focus:outline-none focus:ring-1 focus:ring-primary pr-10"
+              readOnly
+              value={`${typeof window !== 'undefined' ? window.location.origin : ''}/u/${username}`}
+            />
+            <button
+              onClick={handleCopyLink}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center space-x-3 relative">
+        <h1 className="text-3xl font-serif font-bold text-primary">
+          Your Inbox
+        </h1>
+        {unreadCount > 0 ? (
+          <span className="inline-flex items-center justify-center min-w-6 h-6 px-2 bg-primary text-primary-foreground text-sm font-semibold rounded-full shadow-sm">
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </span>
+        ) : null}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
         {initialMessages.length === 0 ? (
           <div className="col-span-full text-center py-12 text-muted-foreground">
             No messages yet. Share your link to receive Eid wishes!
           </div>
         ) : (
+
           initialMessages.map((message) => (
             <motion.div
               key={message.id}
@@ -161,9 +204,9 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
                 </div>
 
                 {/* Top Flap (Closed) */}
-                <div className="absolute top-0 left-0 right-0 h-[65%] origin-top z-30">
+                <div className="absolute top-0 left-0 right-0 h-[65%]  drop-shadow-[0_3px_4px_rgba(0,0,0,0.3)] origin-top z-30">
                   <div
-                    className="absolute inset-0 bg-[#fdfbf7] drop-shadow-md border-b border-primary/10"
+                    className="absolute inset-0 bg-gradient-to-b from-[#fdfbf7] to-[#eee9dc]  border-b border-primary/20"
                     style={{ clipPath: 'polygon(0 0, 50% 100%, 100% 0)' }}
                   />
 
