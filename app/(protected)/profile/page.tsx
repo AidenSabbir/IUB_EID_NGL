@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 import { createClient } from "@/lib/supabase/server"
 import { ProfileCard } from "@/components/profile-card"
-import { LogoutButton } from "@/components/logout-button"
 import { redirect } from "next/navigation"
 
 async function ProfileDashboard() {
@@ -25,7 +24,6 @@ async function ProfileDashboard() {
   return (
     <div className="flex flex-col items-center w-full max-w-md mx-auto space-y-4">
       <ProfileCard profile={profile} isOwner={true} />
-      <LogoutButton />
     </div>
   )
 }
@@ -33,7 +31,7 @@ async function ProfileDashboard() {
 export default function ProfilePage() {
   return (
     <>
-      <main className="flex flex-col items-center justify-start min-h-full py-8 px-4 w-full">
+      <main className="flex flex-col items-center justify-start py-8 px-4 w-full">
         <Suspense fallback={<div className="text-muted-foreground text-sm w-full text-center py-8">Loading profile...</div>}>
           <ProfileDashboard />
         </Suspense>

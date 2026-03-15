@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { BottomNav } from '@/components/bottom-nav'
-import { Moon } from 'lucide-react'
 
 async function AuthGuard({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -29,15 +28,10 @@ export default function ProtectedLayout({
   return (
     <Suspense>
       <AuthGuard>
-        <div className="flex h-screen w-full overflow-hidden">
+        <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
           <BottomNav />
           <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-            <header className="md:hidden flex h-16 shrink-0 items-center gap-3 border-b border-border bg-card px-4 shadow-sm z-10 sticky top-0">
-              <Moon className="w-6 h-6 text-primary" />
-              <h1 className="font-serif text-2xl font-semibold text-primary">{process.env.NEXT_PUBLIC_APP_NAME}</h1>
-            </header>
-            
-            <main className="flex-1 overflow-y-auto pb-24 md:pb-0 relative">
+            <main className="flex-1 overflow-y-auto pb-32 relative">
               {children}
             </main>
           </div>

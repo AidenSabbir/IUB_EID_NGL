@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Playfair_Display, Great_Vibes } from "next/font/google";
 import { EidDecorations } from "@/components/eid-decorations";
 import { DecorativeLights } from "@/components/decorative-lights";
+import { TopNav } from "@/components/top-nav";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -49,12 +50,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
-        <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="fixed inset-0 z-0 pointer-events-none bg-transparent">
           <EidDecorations />
           <DecorativeLights />
         </div>
         <div className="relative z-10 flex flex-col flex-1 h-full">
-          {children}
+          <TopNav />
+          <div className="flex-1 pb-24 md:pb-0">
+            {children}
+          </div>
         </div>
       </body>
     </html>
