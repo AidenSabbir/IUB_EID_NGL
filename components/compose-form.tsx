@@ -154,16 +154,16 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
               <DialogTitle className="sr-only">Full View Preview</DialogTitle>
               <div className="w-full flex justify-center">
                 {previewTab === "envelope" ? (
-                  <PostcardPreview 
+                  <PostcardPreview
                     stampId={selectedStampId}
-                    senderHint={isAnonymous ? "From: Anonymous" : senderName.trim() ? `From: ${senderName}` : "From: Y***"}
+                    senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
                     date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     className="shadow-2xl"
                   />
                 ) : (
-                  <EidCard 
-                    cardConfig={selectedCard} 
-                    message={content} 
+                  <EidCard
+                    cardConfig={selectedCard}
+                    message={content}
                     fontSize={`${fontSize}px`}
                     className="shadow-2xl"
                   />
@@ -174,33 +174,33 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         </div>
         <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
           <div className="flex bg-amber-100/50 p-1 rounded-lg w-full max-w-[240px] mb-4">
-            <button 
-              type="button" 
-              onClick={() => setPreviewTab("envelope")} 
+            <button
+              type="button"
+              onClick={() => setPreviewTab("envelope")}
               className={cn("flex-1 text-xs py-1.5 rounded-md transition-colors", previewTab === "envelope" ? "bg-white shadow-sm text-amber-900 font-medium" : "text-amber-700 hover:text-amber-900")}
             >
               Postcard
             </button>
-            <button 
-              type="button" 
-              onClick={() => setPreviewTab("card")} 
+            <button
+              type="button"
+              onClick={() => setPreviewTab("card")}
               className={cn("flex-1 text-xs py-1.5 rounded-md transition-colors", previewTab === "card" ? "bg-white shadow-sm text-amber-900 font-medium" : "text-amber-700 hover:text-amber-900")}
             >
               Card Inside
             </button>
           </div>
-          <div className="w-full max-w-[240px] flex justify-center">
+          <div className="w-full max-w-[350px] flex justify-center">
             {previewTab === "envelope" ? (
-              <PostcardPreview 
+              <PostcardPreview
                 stampId={selectedStampId}
-                senderHint={isAnonymous ? "From: Anonymous" : senderName.trim() ? `From: ${senderName}` : "From: Y***"}
+                senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
                 date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 className="shadow-md"
               />
             ) : (
-              <EidCard 
-                cardConfig={selectedCard} 
-                message={content} 
+              <EidCard
+                cardConfig={selectedCard}
+                message={content}
                 fontSize={`${fontSize}px`}
                 className="shadow-md"
               />
@@ -219,8 +219,8 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
               onClick={() => setSelectedStampId(stamp.id)}
               className={cn(
                 "relative aspect-[3/2] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
-                selectedStampId === stamp.id 
-                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1" 
+                selectedStampId === stamp.id
+                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
                   : "border-transparent hover:border-amber-200"
               )}
             >
@@ -246,8 +246,8 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
               onClick={() => setSelectedCardId(card.id)}
               className={cn(
                 "relative aspect-[4/5] rounded-lg overflow-hidden border-2 transition-all hover:scale-105",
-                selectedCardId === card.id 
-                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1" 
+                selectedCardId === card.id
+                  ? "border-amber-600 shadow-md ring-2 ring-amber-600/50 ring-offset-1"
                   : "border-transparent hover:border-amber-200"
               )}
             >
@@ -276,9 +276,8 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
             maxLength={MAX_CHARS}
           />
           <div
-            className={`absolute bottom-3 right-3 text-xs font-medium ${
-              charCount >= MAX_CHARS ? "text-red-500" : "text-amber-600/70"
-            }`}
+            className={`absolute bottom-3 right-3 text-xs font-medium ${charCount >= MAX_CHARS ? "text-red-500" : "text-amber-600/70"
+              }`}
           >
             {charCount}/{MAX_CHARS}
           </div>
