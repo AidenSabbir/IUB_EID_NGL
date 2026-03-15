@@ -25,12 +25,39 @@ export function ProfileCard({
 
   const handleShare = async () => {
     try {
-      const url = `${window.location.origin}/u/${profile.username}`;
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      const origin = typeof window !== "undefined" && window.location?.origin 
+        ? window.location.origin 
+        : (typeof window !== "undefined" ? `${window.location.protocol}//${window.location.host}` : "");
+      
+      const url = `${origin}/u/${profile.username}`;
+      
+      if (navigator.share) {
+        await navigator.share({
+          title: `${profile.full_name || profile.username}'s Eid Profile`,
+          text: `Check out my Eid wishes profile!`,
+          url: url,
+        });
+      } else {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
     } catch (err) {
-      console.error("Failed to copy link", err);
+      if (err instanceof Error && err.name === "AbortError") {
+        return;
+      }
+      
+      try {
+        const origin = typeof window !== "undefined" && window.location?.origin 
+          ? window.location.origin 
+          : (typeof window !== "undefined" ? `${window.location.protocol}//${window.location.host}` : "");
+        const url = `${origin}/u/${profile.username}`;
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (clipboardErr) {
+        console.error("Failed to copy link", clipboardErr);
+      }
     }
   };
 
