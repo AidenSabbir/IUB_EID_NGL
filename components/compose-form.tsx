@@ -32,7 +32,6 @@ interface ComposeFormProps {
 export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   const [selectedCardId, setSelectedCardId] = useState<string>(EID_CARDS[0].id);
   const [selectedStampId, setSelectedStampId] = useState<string>(STAMPS[0].id);
-  const [previewTab, setPreviewTab] = useState<"envelope" | "card">("envelope");
   const [content, setContent] = useState("");
   const [fontSize, setFontSize] = useState<number>(24);
   const [senderName, setSenderName] = useState("");
@@ -205,7 +204,40 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       )}
 
       <div className="space-y-3">
-        <Label className="text-sm font-medium text-amber-950">2. Choose a Postcard (Front)</Label>
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium text-amber-950">2. Choose a Postcard (Front)</Label>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
+                <Maximize2 className="w-3 h-3 mr-1.5" />
+                Full View
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
+              <DialogTitle className="sr-only">Full View Preview</DialogTitle>
+              <div className="w-full flex justify-center">
+                <PostcardPreview
+                  stampId={selectedStampId}
+                  senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
+                  date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                  className="shadow-2xl"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+        
+        <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
+          <div className="w-full max-w-[350px] flex justify-center">
+            <PostcardPreview
+              stampId={selectedStampId}
+              senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
+              date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+              className="shadow-md"
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {STAMPS.map((stamp) => (
             <button
@@ -232,7 +264,29 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       </div>
 
       <div className="space-y-3">
-        <Label className="text-sm font-medium text-amber-950">3. Choose a Card Design (Inside)</Label>
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium text-amber-950">3. Choose a Card Design (Inside)</Label>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
+                <Maximize2 className="w-3 h-3 mr-1.5" />
+                Full View
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
+              <DialogTitle className="sr-only">Full View Preview</DialogTitle>
+              <div className="w-full flex justify-center">
+                <EidCard
+                  cardConfig={selectedCard}
+                  message={content}
+                  fontSize={`${fontSize}px`}
+                  className="shadow-2xl"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {EID_CARDS.map((card) => (
             <button
@@ -255,6 +309,17 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
               />
             </button>
           ))}
+        </div>
+
+        <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
+          <div className="w-full max-w-[350px] flex justify-center">
+            <EidCard
+              cardConfig={selectedCard}
+              message={content}
+              fontSize={`${fontSize}px`}
+              className="shadow-md"
+            />
+          </div>
         </div>
       </div>
 
@@ -292,75 +357,6 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
           step={1}
           className="py-2"
         />
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label className="text-sm font-medium text-amber-950">6. Live Preview</Label>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
-                <Maximize2 className="w-3 h-3 mr-1.5" />
-                Full View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
-              <DialogTitle className="sr-only">Full View Preview</DialogTitle>
-              <div className="w-full flex justify-center">
-                {previewTab === "envelope" ? (
-                  <PostcardPreview
-                    stampId={selectedStampId}
-                    senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
-                    date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                    className="shadow-2xl"
-                  />
-                ) : (
-                  <EidCard
-                    cardConfig={selectedCard}
-                    message={content}
-                    fontSize={`${fontSize}px`}
-                    className="shadow-2xl"
-                  />
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-        <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
-          <div className="flex bg-amber-100/50 p-1 rounded-lg w-full max-w-[240px] mb-4">
-            <button
-              type="button"
-              onClick={() => setPreviewTab("envelope")}
-              className={cn("flex-1 text-xs py-1.5 rounded-md transition-colors", previewTab === "envelope" ? "bg-white shadow-sm text-amber-900 font-medium" : "text-amber-700 hover:text-amber-900")}
-            >
-              Postcard
-            </button>
-            <button
-              type="button"
-              onClick={() => setPreviewTab("card")}
-              className={cn("flex-1 text-xs py-1.5 rounded-md transition-colors", previewTab === "card" ? "bg-white shadow-sm text-amber-900 font-medium" : "text-amber-700 hover:text-amber-900")}
-            >
-              Card Inside
-            </button>
-          </div>
-          <div className="w-full max-w-[350px] flex justify-center">
-            {previewTab === "envelope" ? (
-              <PostcardPreview
-                stampId={selectedStampId}
-                senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
-                date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                className="shadow-md"
-              />
-            ) : (
-              <EidCard
-                cardConfig={selectedCard}
-                message={content}
-                fontSize={`${fontSize}px`}
-                className="shadow-md"
-              />
-            )}
-          </div>
-        </div>
       </div>
 
       {error && (
