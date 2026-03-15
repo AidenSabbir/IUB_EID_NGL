@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Playfair_Display } from "next/font/google";
+import { Geist, Playfair_Display, Great_Vibes } from "next/font/google";
 import { EidDecorations } from "@/components/eid-decorations";
+import { DecorativeLights } from "@/components/decorative-lights";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -31,6 +32,13 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,8 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <body className={`${geistSans.className} ${playfair.variable} antialiased font-sans`}>
+      <body className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans`}>
         <EidDecorations />
+        <DecorativeLights />
         {children}
       </body>
     </html>

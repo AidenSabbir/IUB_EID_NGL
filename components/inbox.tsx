@@ -28,6 +28,8 @@ interface InboxClientProps {
   unlockTime: number;
 }
 
+import { Sparkles } from "lucide-react";
+
 export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   
@@ -39,20 +41,29 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
   const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
   const handleEnvelopeClick = (message: Message) => {
-    if (!isUnlocked) return;
     setSelectedMessage(message);
   };
 
   if (selectedMessage) {
+    const rawSenderName = selectedMessage.is_anonymous 
+      ? "Anonymous" 
+      : (selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone");
+    
+    const senderName = isUnlocked 
+      ? rawSenderName 
+      : (selectedMessage.is_anonymous ? "A********" : `${rawSenderName.charAt(0)}****`);
+
     return (
       <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm overflow-y-auto">
         <EnvelopeReveal
-          senderName={selectedMessage.is_anonymous ? "Anonymous" : (selectedMessage.sender_name || selectedMessage.sender_full_name || selectedMessage.sender_username || "Someone")}
+          senderName={senderName}
           content={selectedMessage.content || ""}
           original_message_id={selectedMessage.id}
           sender_id={selectedMessage.is_anonymous ? null : selectedMessage.sender_id}
           sender_username={selectedMessage.is_anonymous ? null : selectedMessage.sender_username}
           onClose={() => setSelectedMessage(null)}
+          isUnlocked={isUnlocked}
+          createdAt={selectedMessage.created_at}
         />
       </div>
     );
@@ -92,7 +103,7 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
         {initialMessages.length === 0 ? (
           <div className="col-span-full text-center py-12 text-muted-foreground">
             No messages yet. Share your link to receive Eid wishes!
@@ -101,50 +112,73 @@ export function InboxClient({ initialMessages, unlockTime }: InboxClientProps) {
           initialMessages.map((message) => (
             <motion.div
               key={message.id}
-              whileHover={isUnlocked ? { scale: 1.02 } : {}}
-              whileTap={isUnlocked ? { scale: 0.98 } : {}}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => handleEnvelopeClick(message)}
-              className={`
-                relative overflow-hidden rounded-xl border p-6 transition-all
-                ${isUnlocked 
-                  ? "bg-card border-primary/30 cursor-pointer hover:shadow-md hover:border-primary/50" 
-                  : "bg-muted/50 border-border/50 cursor-not-allowed opacity-80"
-                }
-              `}
+              className="cursor-pointer w-full max-w-[280px]"
+              style={{ perspective: "1000px" }}
             >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className={`
-                    p-3 rounded-full 
-                    ${isUnlocked ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}
-                  `}>
-                    {isUnlocked ? (
-                      message.is_read ? <MailOpen className="w-6 h-6" /> : <Mail className="w-6 h-6" />
-                    ) : (
-                      <Lock className="w-6 h-6" />
-                    )}
+              <div className={`relative w-full aspect-[1.5/1] bg-[#f9f7f1] rounded-sm shadow-md border border-primary/20 transition-all ${!isUnlocked && "opacity-90"}`}>
+                {/* Back side of the envelope (inside) */}
+                <div className="absolute inset-0 bg-[#eee9dc] rounded-sm" />
+
+                {/* A fake letter edge peeking out */}
+                <div className="absolute top-2 left-4 right-4 h-1/3 bg-white shadow-inner border border-primary/10 rounded-t-sm opacity-50" />
+
+                {/* Left Flap */}
+                <div className="absolute left-0 top-0 bottom-0 w-[55%] z-10 drop-shadow-[2px_0_3px_rgba(0,0,0,0.05)]">
+                  <div 
+                    className="w-full h-full bg-gradient-to-r from-[#f9f7f1] to-[#f4ebd0] border-r border-primary/10" 
+                    style={{ clipPath: 'polygon(0 0, 100% 50%, 0 100%)' }} 
+                  />
+                </div>
+                
+                {/* Right Flap */}
+                <div className="absolute right-0 top-0 bottom-0 w-[55%] z-10 drop-shadow-[-2px_0_3px_rgba(0,0,0,0.05)]">
+                  <div 
+                    className="w-full h-full bg-gradient-to-l from-[#f9f7f1] to-[#f4ebd0] border-l border-primary/10" 
+                    style={{ clipPath: 'polygon(100% 0, 0 50%, 100% 100%)' }} 
+                  />
+                </div>
+
+                {/* Bottom Flap */}
+                <div className="absolute bottom-0 left-0 right-0 h-[65%] z-20 drop-shadow-[0_-2px_4px_rgba(0,0,0,0.05)]">
+                  <div 
+                    className="w-full h-full bg-[#fdfbf7] border-t border-primary/10" 
+                    style={{ clipPath: 'polygon(0 100%, 50% 0, 100% 100%)' }} 
+                  >
+                    <div className="absolute bottom-3 left-0 right-0 text-center flex flex-col items-center">
+                      <span className="text-[10px] sm:text-xs font-serif text-primary/80 font-medium truncate px-4 w-full">
+                        From: {isUnlocked 
+                          ? (message.is_anonymous ? "Anonymous" : (message.sender_name || message.sender_full_name || message.sender_username || "Someone")) 
+                          : (message.is_anonymous ? "A********" : `${(message.sender_name || message.sender_full_name || message.sender_username || "Someone").charAt(0)}****`)}
+                      </span>
+                      <span className="text-[9px] text-primary/50 mt-0.5">
+                        {new Date(message.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-foreground">
-                      From: {message.is_anonymous ? "Anonymous" : (message.sender_name || message.sender_full_name || message.sender_username || "Someone")}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(message.created_at).toLocaleString([], {
-                        dateStyle: 'medium',
-                        timeStyle: 'short'
-                      })}
-                    </p>
+                </div>
+
+                {/* Top Flap (Closed) */}
+                <div className="absolute top-0 left-0 right-0 h-[65%] origin-top z-30">
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-b from-[#fdfbf7] to-[#eee9dc] drop-shadow-md"
+                    style={{ clipPath: 'polygon(0 0, 50% 100%, 100% 0)' }}
+                  />
+                  
+                  {/* Wax Seal */}
+                  <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center shadow-md border-2 border-primary/20">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-primary-foreground/30 flex items-center justify-center">
+                      {isUnlocked ? (
+                        message.is_read ? <MailOpen className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" /> : <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
+                      ) : (
+                        <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-              
-              {isUnlocked && message.content && (
-                <div className="mt-4 pt-4 border-t border-border/50">
-                  <p className="text-sm text-foreground line-clamp-2">
-                    {message.content}
-                  </p>
-                </div>
-              )}
             </motion.div>
           ))
         )}

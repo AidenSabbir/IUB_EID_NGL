@@ -16,8 +16,10 @@ interface Profile {
 
 export function ProfileCard({
   profile,
+  isOwner = false,
 }: {
   profile: Profile;
+  isOwner?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -94,48 +96,52 @@ export function ProfileCard({
         </p>
 
         {/* Hardcoded Eid details */}
-        <div className="bg-primary/5 border border-primary/20 rounded-3xl p-5 mb-8 w-full relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
-          
-          <p className="text-sm/relaxed font-medium text-foreground/90 italic mb-5 relative z-10">
-            &quot;✨ Wishing everyone peace, prosperity, and a joyous Eid!&quot;
-          </p>
-          
-          <div className="flex flex-col gap-3 text-sm text-muted-foreground items-center justify-center relative z-10">
-            <div className="flex items-center gap-2 bg-background/50 px-3 py-1.5 rounded-full border border-primary/10 backdrop-blur-sm">
-              <MapPin className="w-4 h-4 text-primary" />
-              <span className="font-medium">Celebrating Eid</span>
-            </div>
-            <div className="flex items-center gap-2 bg-background/50 px-3 py-1.5 rounded-full border border-primary/10 backdrop-blur-sm">
-              <Calendar className="w-4 h-4 text-primary" />
-              <span className="font-medium">Joined Ramadan 1445</span>
+        {isOwner && (
+          <div className="bg-primary/5 border border-primary/20 rounded-3xl p-5 mb-8 w-full relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+            
+            <p className="text-sm/relaxed font-medium text-foreground/90 italic mb-5 relative z-10">
+              &quot;✨ Wishing everyone peace, prosperity, and a joyous Eid!&quot;
+            </p>
+            
+            <div className="flex flex-col gap-3 text-sm text-muted-foreground items-center justify-center relative z-10">
+              <div className="flex items-center gap-2 bg-background/50 px-3 py-1.5 rounded-full border border-primary/10 backdrop-blur-sm">
+                <MapPin className="w-4 h-4 text-primary" />
+                <span className="font-medium">Celebrating Eid</span>
+              </div>
+              <div className="flex items-center gap-2 bg-background/50 px-3 py-1.5 rounded-full border border-primary/10 backdrop-blur-sm">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span className="font-medium">Joined Ramadan 1445</span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        <div className="flex w-full gap-3 justify-center">
-          <Button
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_8px_20px_-8px_rgba(234,179,8,0.5)] rounded-2xl h-12 text-base font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(234,179,8,0.6)] group"
-            onClick={handleShare}
-            aria-label="Share profile"
-          >
-            {copied ? (
-              <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="flex items-center"
-              >
-                <Check className="w-5 h-5 mr-2" />
-                Copied Link!
-              </motion.div>
-            ) : (
-              <div className="flex items-center">
-                <Share className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                Share Profile
-              </div>
-            )}
-          </Button>
-        </div>
+        {isOwner && (
+          <div className="flex w-full gap-3 justify-center">
+            <Button
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_8px_20px_-8px_rgba(234,179,8,0.5)] rounded-2xl h-12 text-base font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(234,179,8,0.6)] group"
+              onClick={handleShare}
+              aria-label="Share profile"
+            >
+              {copied ? (
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="flex items-center"
+                >
+                  <Check className="w-5 h-5 mr-2" />
+                  Copied Link!
+                </motion.div>
+              ) : (
+                <div className="flex items-center">
+                  <Share className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                  Share Profile
+                </div>
+              )}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
