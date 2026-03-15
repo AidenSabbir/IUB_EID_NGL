@@ -23,42 +23,74 @@ export function ProfileCard({
 }) {
   const [copied, setCopied] = useState(false);
 
-  const handleShare = async () => {
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
     try {
-      const origin = typeof window !== "undefined" && window.location?.origin 
-        ? window.location.origin 
-        : (typeof window !== "undefined" ? `${window.location.protocol}//${window.location.host}` : "");
-      
-      const url = `${origin}/u/${profile.username}`;
-      
+      const successful = document.execCommand('copy');
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        console.error('Fallback: Copying text command was unsuccessful');
+        alert('Failed to copy link automatically. Please copy it manually: ' + text);
+      }
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy', err);
+      alert('Failed to copy link automatically. Please copy it manually: ' + text);
+    }
+
+    document.body.removeChild(textArea);
+  };
+
+  const handleShare = async () => {
+    const origin = typeof window !== "undefined" && window.location?.origin 
+      ? window.location.origin 
+      : (typeof window !== "undefined" ? `${window.location.protocol}//${window.location.host}` : "");
+    
+    const url = `${origin}/u/${profile.username}`;
+
+    try {
       if (navigator.share) {
         await navigator.share({
           title: `${profile.full_name || profile.username}'s Eid Profile`,
           text: `Check out my Eid wishes profile!`,
           url: url,
         });
-      } else {
-        await navigator.clipboard.writeText(url);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        return; // If share succeeds, we're done
       }
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") {
-        return;
+        return; // User cancelled share
       }
-      
+      // Fall through to copy if share fails for other reasons
+    }
+
+    // Try modern clipboard API first
+    if (navigator.clipboard && window.isSecureContext) {
       try {
-        const origin = typeof window !== "undefined" && window.location?.origin 
-          ? window.location.origin 
-          : (typeof window !== "undefined" ? `${window.location.protocol}//${window.location.host}` : "");
-        const url = `${origin}/u/${profile.username}`;
         await navigator.clipboard.writeText(url);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+        return;
       } catch (clipboardErr) {
-        console.error("Failed to copy link", clipboardErr);
+        console.error("Modern clipboard failed, trying fallback", clipboardErr);
+        // Fall through to fallback
       }
     }
+
+    // Fallback for insecure contexts or when modern API fails
+    fallbackCopyTextToClipboard(url);
   };
 
   return (
