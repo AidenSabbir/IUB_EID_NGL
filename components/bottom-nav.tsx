@@ -27,7 +27,7 @@ export function BottomNav() {
       <aside className="hidden md:flex flex-col w-64 border-r border-border h-full bg-card p-4">
         <div className="flex items-center gap-3 mb-8 px-2">
           <Moon className="w-6 h-6 text-primary" />
-          <span className="font-serif text-2xl font-semibold text-primary">Eid Moon</span>
+          <span className="font-serif text-2xl font-semibold text-primary">{process.env.NEXT_PUBLIC_APP_NAME}</span>
         </div>
         <nav className="flex flex-col gap-2">
           {tabs.map((tab) => {

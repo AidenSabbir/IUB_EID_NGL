@@ -21,7 +21,7 @@ export async function generateMetadata({
 
   if (!profile) {
     return {
-      title: "User Not Found | Eid Moon",
+      title: `User Not Found | ${process.env.NEXT_PUBLIC_APP_NAME}`,
       description: "The user you're looking for doesn't exist.",
     };
   }
@@ -30,7 +30,7 @@ export async function generateMetadata({
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 
-  const title = `****** | Eid Moon`;
+  const title = `****** | ${process.env.NEXT_PUBLIC_APP_NAME}`;
   const description = `Send an anonymous Eid wish`;
   const pageUrl = `${defaultUrl}/u/${username}`;
 

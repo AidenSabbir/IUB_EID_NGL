@@ -10,10 +10,10 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Eid Moon 🌙",
+  title: `${process.env.NEXT_PUBLIC_APP_NAME} 🌙`,
   description: "Send heartfelt Eid wishes to your loved ones",
   openGraph: {
-    title: "Eid Moon 🌙",
+    title: `${process.env.NEXT_PUBLIC_APP_NAME} 🌙`,
     description: "Send heartfelt Eid wishes to your loved ones",
     url: defaultUrl,
     type: "website",
@@ -46,7 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <body className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans`}>
+      <body
+        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans`}
+      >
         <EidDecorations />
         <DecorativeLights />
         {children}

@@ -25,7 +25,7 @@ export default function LoginPage() {
               <Moon className="w-8 h-8 text-primary" strokeWidth={1.5} />
             </div>
           </div>
-          <CardTitle className="text-3xl font-serif text-foreground">Eid Moon</CardTitle>
+          <CardTitle className="text-3xl font-serif text-foreground">{process.env.NEXT_PUBLIC_APP_NAME}</CardTitle>
           <CardDescription className="text-base text-muted-foreground leading-relaxed">
             Send heartfelt Eid wishes to your loved ones
           </CardDescription>
