@@ -31,7 +31,7 @@ export default function ProtectedLayout({
         <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
           <BottomNav />
           <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-            <main className="flex-1 overflow-y-auto pb-32 relative">
+            <main className="flex-1 overflow-y-auto relative">
               {children}
             </main>
           </div>

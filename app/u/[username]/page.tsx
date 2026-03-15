@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileCard } from "@/components/profile-card";
 import { ComposeForm } from "@/components/compose-form";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -94,10 +97,24 @@ export default function ProfilePage({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center p-4 pb-32">
-      <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
-        <ProfileData paramsPromise={params} />
-      </Suspense>
-    </div>
+    <>
+      <div className="fixed top-4 left-4 z-50">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          asChild 
+          className="rounded-full bg-background/50 backdrop-blur-sm border border-border/40 hover:bg-background/80 transition-all"
+        >
+          <Link href="/">
+            <Home className="w-5 h-5 text-primary" />
+          </Link>
+        </Button>
+      </div>
+      <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center p-4 pb-32">
+        <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
+          <ProfileData paramsPromise={params} />
+        </Suspense>
+      </div>
+    </>
   );
 }
