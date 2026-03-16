@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Lock, MailOpen, Check, Copy, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -35,10 +36,22 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
   const [mounted, setMounted] = useState(false);
   const { unreadCount } = useUnreadCount()
   const { isUnlocked, timeRemaining } = useEidUnlock(new Date(unlockTime));
+  const router = useRouter();
+  const wasLockedRef = useRef(!isUnlocked);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isUnlocked && wasLockedRef.current) {
+      wasLockedRef.current = false;
+      setSelectedMessage(null);
+      router.refresh();
+    } else if (!isUnlocked && !wasLockedRef.current) {
+      wasLockedRef.current = true;
+    }
+  }, [isUnlocked, router]);
 
   const handleCopyLink = () => {
     const url = `${window.location.origin}/u/${username}`;
