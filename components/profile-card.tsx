@@ -117,11 +117,13 @@ export function ProfileCard({
         pixelRatio: 4,
         skipFonts: false,
         fontEmbedCSS: '',
+        width: cardRef.current.scrollWidth,
+        height: cardRef.current.scrollHeight,
         style: {
-          transform: 'scale(1)',
+          transform: 'none',
           borderRadius: '0.75rem',
-          width: `${cardRef.current.offsetWidth}px`,
-          height: `${cardRef.current.offsetHeight}px`,
+          margin: '0',
+          padding: '24px',
         }
       });
 
