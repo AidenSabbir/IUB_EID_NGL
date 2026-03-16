@@ -164,38 +164,41 @@ export function ProfileCard({
         isSharing ? "border-2 border-primary/40 rounded-xl bg-white shadow-2xl scale-100" : "border-primary/40 bg-card/95 backdrop-blur-md rounded-[2rem] shadow-[0_0_40px_-15px_rgba(234,179,8,0.4)]"
       )}
     >
-      {/* Decorative background elements */}
-      <motion.div
-        animate={isSharing ? {} : { opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1], rotate: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-        className={cn("absolute -top-12 -right-12 text-primary/30 pointer-events-none", isSharing && "opacity-30 scale-100 rotate-0")}
-      >
-        <Moon className="w-48 h-48" fill="currentColor" />
-      </motion.div>
+      {!isSharing && (
+        <>
+          <motion.div
+            animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1], rotate: [0, -5, 0] }}
+            transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+            className="absolute -top-12 -right-12 text-primary/30 pointer-events-none"
+          >
+            <Moon className="w-48 h-48" fill="currentColor" />
+          </motion.div>
 
-      <motion.div
-        animate={isSharing ? {} : { y: [0, -10, 0], opacity: [0.6, 1, 0.6], scale: [0.8, 1.2, 0.8] }}
-        transition={{ repeat: Infinity, duration: 4, delay: 1 }}
-        className={cn("absolute top-12 left-10 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.9)]", isSharing && "opacity-80 scale-100 y-0")}
-      >
-        <Sparkles className="w-5 h-5" />
-      </motion.div>
+          <motion.div
+            animate={{ y: [0, -10, 0], opacity: [0.6, 1, 0.6], scale: [0.8, 1.2, 0.8] }}
+            transition={{ repeat: Infinity, duration: 4, delay: 1 }}
+            className="absolute top-12 left-10 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.9)]"
+          >
+            <Sparkles className="w-5 h-5" />
+          </motion.div>
 
-      <motion.div
-        animate={isSharing ? {} : { y: [0, 8, 0], opacity: [0.5, 0.9, 0.5], scale: [0.9, 1.1, 0.9] }}
-        transition={{ repeat: Infinity, duration: 5, delay: 0.5 }}
-        className={cn("absolute bottom-24 right-8 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.7)]", isSharing && "opacity-80 scale-100 y-0")}
-      >
-        <Sparkles className="w-7 h-7" />
-      </motion.div>
+          <motion.div
+            animate={{ y: [0, 8, 0], opacity: [0.5, 0.9, 0.5], scale: [0.9, 1.1, 0.9] }}
+            transition={{ repeat: Infinity, duration: 5, delay: 0.5 }}
+            className="absolute bottom-24 right-8 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.7)]"
+          >
+            <Sparkles className="w-7 h-7" />
+          </motion.div>
 
-      <motion.div
-        animate={isSharing ? {} : { y: [0, -6, 0], opacity: [0.4, 0.8, 0.4], rotate: [0, 15, 0] }}
-        transition={{ repeat: Infinity, duration: 4.5, delay: 2 }}
-        className={cn("absolute top-1/2 left-6 text-primary pointer-events-none", isSharing && "opacity-60 rotate-0 y-0")}
-      >
-        <Sparkles className="w-4 h-4" />
-      </motion.div>
+          <motion.div
+            animate={{ y: [0, -6, 0], opacity: [0.4, 0.8, 0.4], rotate: [0, 15, 0] }}
+            transition={{ repeat: Infinity, duration: 4.5, delay: 2 }}
+            className="absolute top-1/2 left-6 text-primary pointer-events-none"
+          >
+            <Sparkles className="w-4 h-4" />
+          </motion.div>
+        </>
+      )}
 
       <CardContent className="pt-10 pb-10 px-8 flex flex-col items-center text-center relative z-10">
         <div 
@@ -287,9 +290,9 @@ export function ProfileCard({
         </div>
         
         {isSharing && (
-          <div className="mt-8 pt-6 border-t border-primary/10 w-full flex flex-col items-center gap-1 opacity-80">
-            <p className="text-sm font-branding text-primary font-bold tracking-tight uppercase">Chand Postal</p>
-            <p className="text-[10px] text-muted-foreground font-mono italic">link: </p>
+          <div className="mt-8 pt-6 border-t border-primary/10 w-full flex flex-col items-center">
+            <p className="text-sm font-branding text-primary font-bold tracking-tight uppercase leading-none mb-1">Chand Postal</p>
+            <p className="text-[10px] text-muted-foreground font-mono italic leading-none">link: </p>
           </div>
         )}
         
