@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { Cairo, Amiri, Aref_Ruqaa, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next"
+import { Cairo, Amiri, Aref_Ruqaa, Space_Grotesk, Press_Start_2P } from "next/font/google";
 import { EidDecorations } from "@/components/eid-decorations";
 import { DecorativeLights } from "@/components/decorative-lights";
 import { TopNav } from "@/components/top-nav";
 import { Footer } from "@/components/footer";
 import "./globals.css";
+import Script from "next/script";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -12,17 +14,20 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: `Chand Postal || IUBPC`,
-  description: "Send heartfelt Eid wishes to your loved ones",
+  title: "Chand Postal | IUB Programming Club",
+  description:
+    "Chand Postal is an Eid greeting platform by IUB Programming Club where you can send digital Eid cards to your loved ones that open on Chand Raat.",
   icons: {
-    icon: "/transparent_logo.png",
-    apple: "/transparent_logo.png",
+    icon: "/chand_icon.png",
+    apple: "/chand_icon.png",
   },
   openGraph: {
-    title: `Chand Postal || IUBPC`,
-    description: "Send heartfelt Eid wishes to your loved ones",
+    title: "Chand Postal | IUB Programming Club",
+    description:
+      "Send digital Eid cards to your friends and family and let them open your wishes on Chand Raat.",
     url: defaultUrl,
     type: "website",
+    siteName: "Chand Postal",
   },
 };
 
@@ -52,6 +57,13 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-press-start",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -60,8 +72,21 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body
-        className={`${cairo.variable} ${amiri.variable} ${arefRuqaa.variable} ${spaceGrotesk.variable} antialiased font-sans flex flex-col min-h-dvh`}
+        className={`${cairo.variable} ${amiri.variable} ${arefRuqaa.variable} ${spaceGrotesk.variable} ${pressStart2P.variable} antialiased font-sans flex flex-col min-h-dvh`}
       >
+        {/* Analytics Scripts */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QXJ6GZJQKF"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QXJ6GZJQKF');
+          `}
+        </Script>
         <div className="fixed inset-0 z-0 pointer-events-none bg-transparent">
           <EidDecorations />
           <DecorativeLights />
@@ -72,6 +97,7 @@ export default function RootLayout({
             {children}
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );

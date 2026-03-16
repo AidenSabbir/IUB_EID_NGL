@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { EnvelopeReveal } from "@/components/envelope-reveal";
 import { useEidUnlock } from "@/hooks/use-eid-unlock";
 import { useUnreadCount } from "@/hooks/use-unread-count"
+import Image from "next/image";
 interface Message {
   id: string;
   sender_id: string | null;
@@ -224,10 +225,10 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
                   />
 
                   {/* Wax Seal */}
-                  <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center shadow-md border-2 border-primary/40">
+                  <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#4A3B2C] flex items-center justify-center shadow-md border-2 border-white/40">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-primary-foreground/50 flex items-center justify-center">
                       {isUnlocked ? (
-                        message.is_read ? <MailOpen className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" /> : <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
+                        message.is_read ? <MailOpen className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" /> : <Image src="/chand_icon.png" alt="Moon" width={50} height={50} className="w-6 h-6 inline-block text-primary" />
                       ) : (
                         <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
                       )}

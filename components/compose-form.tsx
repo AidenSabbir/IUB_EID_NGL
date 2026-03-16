@@ -159,8 +159,8 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       onSubmit={handleSubmit}
       className="flex flex-col space-y-6 w-full"
     >
-      <div className="flex items-center justify-between p-5 bg-gradient-to-br from-amber-50 to-white rounded-2xl border-2 border-amber-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
-        <div className="flex items-start gap-4">
+      <div className="flex items-center justify-between p-2 px-4 bg-gradient-to-br from-amber-50 to-white rounded-2xl border-2 border-amber-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+        <div className="flex items-center gap-4">
           <div className={cn(
             "p-2.5 rounded-xl transition-colors shrink-0",
             isAnonymous ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"
@@ -236,7 +236,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           {STAMPS.map((stamp) => (
             <button
               key={stamp.id}
@@ -285,7 +285,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
           </Dialog>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-4 gap-3">
           {EID_CARDS.map((card) => (
             <button
               key={card.id}

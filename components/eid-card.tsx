@@ -35,6 +35,7 @@ export function EidCard({ cardConfig, message, className, fontSize }: EidCardPro
         className="object-cover pointer-events-none"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         priority
+        unoptimized
       />
       
       <div
@@ -52,9 +53,9 @@ export function EidCard({ cardConfig, message, className, fontSize }: EidCardPro
             color: cardConfig.color,
             textAlign: cardConfig.align,
             fontSize: computedFontSize,
-            fontFamily: 'var(--font-aref-ruqaa), serif',
-            textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            lineHeight: '1.4',
+            fontFamily: cardConfig.fontFamily ?? 'var(--font-aref-ruqaa), serif',
+            textShadow: cardConfig.id === '8' ? 'none' : '0 2px 4px rgba(0,0,0,0.1)',
+            lineHeight: cardConfig.id === '8' ? '1.8' : '1.4',
           }}
         >
           {message || 'Your message here...'}
