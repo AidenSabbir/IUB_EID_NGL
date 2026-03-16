@@ -157,47 +157,49 @@ export function ProfileCard({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto border-primary/40 bg-card/95 backdrop-blur-md relative overflow-hidden rounded-[2rem] shadow-[0_0_40px_-15px_rgba(234,179,8,0.4)]">
+    <Card 
+      ref={cardRef}
+      className={cn(
+        "w-full max-w-md mx-auto relative overflow-hidden transition-all duration-300",
+        isSharing ? "border-2 border-primary/40 rounded-xl bg-white shadow-2xl scale-100" : "border-primary/40 bg-card/95 backdrop-blur-md rounded-[2rem] shadow-[0_0_40px_-15px_rgba(234,179,8,0.4)]"
+      )}
+    >
       {/* Decorative background elements */}
       <motion.div
-        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1], rotate: [0, -5, 0] }}
+        animate={isSharing ? {} : { opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1], rotate: [0, -5, 0] }}
         transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-        className="absolute -top-12 -right-12 text-primary/30 pointer-events-none"
+        className={cn("absolute -top-12 -right-12 text-primary/30 pointer-events-none", isSharing && "opacity-30 scale-100 rotate-0")}
       >
         <Moon className="w-48 h-48" fill="currentColor" />
       </motion.div>
 
       <motion.div
-        animate={{ y: [0, -10, 0], opacity: [0.6, 1, 0.6], scale: [0.8, 1.2, 0.8] }}
+        animate={isSharing ? {} : { y: [0, -10, 0], opacity: [0.6, 1, 0.6], scale: [0.8, 1.2, 0.8] }}
         transition={{ repeat: Infinity, duration: 4, delay: 1 }}
-        className="absolute top-12 left-10 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.9)]"
+        className={cn("absolute top-12 left-10 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.9)]", isSharing && "opacity-80 scale-100 y-0")}
       >
         <Sparkles className="w-5 h-5" />
       </motion.div>
 
       <motion.div
-        animate={{ y: [0, 8, 0], opacity: [0.5, 0.9, 0.5], scale: [0.9, 1.1, 0.9] }}
+        animate={isSharing ? {} : { y: [0, 8, 0], opacity: [0.5, 0.9, 0.5], scale: [0.9, 1.1, 0.9] }}
         transition={{ repeat: Infinity, duration: 5, delay: 0.5 }}
-        className="absolute bottom-24 right-8 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.7)]"
+        className={cn("absolute bottom-24 right-8 text-primary pointer-events-none drop-shadow-[0_0_8px_rgba(234,179,8,0.7)]", isSharing && "opacity-80 scale-100 y-0")}
       >
         <Sparkles className="w-7 h-7" />
       </motion.div>
 
       <motion.div
-        animate={{ y: [0, -6, 0], opacity: [0.4, 0.8, 0.4], rotate: [0, 15, 0] }}
+        animate={isSharing ? {} : { y: [0, -6, 0], opacity: [0.4, 0.8, 0.4], rotate: [0, 15, 0] }}
         transition={{ repeat: Infinity, duration: 4.5, delay: 2 }}
-        className="absolute top-1/2 left-6 text-primary pointer-events-none"
+        className={cn("absolute top-1/2 left-6 text-primary pointer-events-none", isSharing && "opacity-60 rotate-0 y-0")}
       >
         <Sparkles className="w-4 h-4" />
       </motion.div>
 
       <CardContent className="pt-10 pb-10 px-8 flex flex-col items-center text-center relative z-10">
         <div 
-          ref={cardRef} 
-          className={cn(
-            "flex flex-col items-center w-full py-8 px-6 transition-all duration-300",
-            isSharing ? "border-2 border-primary/40 rounded-xl bg-white shadow-2xl scale-[1.02]" : "bg-transparent"
-          )}
+          className="flex flex-col items-center w-full bg-transparent"
         >
           <div className="relative mb-6">
             <Avatar className="size-28 border-4 border-background shadow-xl ring-2 ring-primary/60 ring-offset-4 ring-offset-background">
@@ -212,11 +214,11 @@ export function ProfileCard({
             </Avatar>
 
             <motion.div
-              animate={{ rotate: [-5, 5, -5] }}
+              animate={isSharing ? {} : { rotate: [-5, 5, -5] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
               className={cn(
                 "absolute -bottom-2 -right-2 bg-background text-primary p-2 rounded-full shadow-lg border-2 border-primary/40",
-                isSharing && "opacity-0"
+                isSharing && "rotate-0"
               )}
             >
               <Moon className="w-5 h-5" fill="currentColor" />
@@ -282,32 +284,38 @@ export function ProfileCard({
             Send me EID Wishes!🌙
           </div>
 
-          {isSharing && (
-            <div className="mt-8 pt-6 border-t border-primary/10 w-full flex flex-col items-center gap-1 opacity-80">
-              <p className="text-sm font-branding text-primary font-bold tracking-tight uppercase">Chand Postal</p>
-              <p className="text-[10px] text-muted-foreground font-mono italic">link: </p>
-            </div>
-          )}
         </div>
-        <h3 className=" text-center font-bold font-mono flex justify-center items-center gap-2">
-          Step 1: Copy the link
-        </h3>
-        <div className="flex w-full max-w-sm items-center space-x-2">
-          <div className="relative flex-1">
-            <input
-              className="w-full px-3 py-2 text-sm bg-muted border border-primary/10 rounded-md focus:outline-none focus:ring-1 focus:ring-primary pr-10"
-              readOnly
-              value={`${typeof window !== 'undefined' ? window.location.origin : ''}/u/${profile.username}`}
-            />
-            <button
-              onClick={handleCopyLink}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
-            >
-              {copiedLink ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            </button>
+        
+        {isSharing && (
+          <div className="mt-8 pt-6 border-t border-primary/10 w-full flex flex-col items-center gap-1 opacity-80">
+            <p className="text-sm font-branding text-primary font-bold tracking-tight uppercase">Chand Postal</p>
+            <p className="text-[10px] text-muted-foreground font-mono italic">link: </p>
           </div>
-        </div>
-        {isOwner && (
+        )}
+        
+        {!isSharing && (
+          <>
+            <h3 className=" text-center font-bold font-mono flex justify-center items-center gap-2 mt-8">
+              Step 1: Copy the link
+            </h3>
+            <div className="flex w-full max-w-sm items-center space-x-2 mt-2">
+              <div className="relative flex-1">
+                <input
+                  className="w-full px-3 py-2 text-sm bg-muted border border-primary/10 rounded-md focus:outline-none focus:ring-1 focus:ring-primary pr-10"
+                  readOnly
+                  value={`${typeof window !== 'undefined' ? window.location.origin : ''}/u/${profile.username}`}
+                />
+                <button
+                  onClick={handleCopyLink}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
+                >
+                  {copiedLink ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+        {isOwner && !isSharing && (
 
           <div className="flex flex-col w-full gap-3 mt-8 justify-center">
             <h3 className=" text-center font-bold mb-[-10]  font-mono flex justify-center items-center gap-2">
