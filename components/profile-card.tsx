@@ -303,9 +303,11 @@ export function ProfileCard({
             <span>@{profile.username}</span>
           </p>
 
-          <div className="mt-6 text-primary py-3 px-4 rounded-2xl font-spartan font-bold text-xl border-2 border-primary/50 bg-primary/5 shadow-inner">
-            Send me EID Wishes!🌙
-          </div>
+          {isOwner && (
+            <div className="mt-6 text-primary py-3 px-4 rounded-2xl font-spartan font-bold text-xl border-2 border-primary/50 bg-primary/5 shadow-inner">
+              Send me EID Wishes!🌙
+            </div>
+          )}
 
         </div>
         
@@ -316,7 +318,7 @@ export function ProfileCard({
           </div>
         )}
         
-        {!isSharing && (
+        {!isSharing && isOwner && (
           <>
             <h3 className=" text-center font-bold font-mono flex justify-center items-center gap-2 mt-8">
               Step 1: Copy the link
