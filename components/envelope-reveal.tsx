@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Lock, X, Download, Layout, Image as ImageIcon } from "lucide-react";
+import { Lock, X, Download, Layout, Image as ImageIcon, Share2 } from "lucide-react";
 import { EID_CARDS } from "@/lib/eid-cards";
 import { EidCard } from "@/components/eid-card";
 import { PostcardPreview } from "@/components/postcard-preview";
@@ -30,7 +30,14 @@ export function EnvelopeReveal({
   createdAt
 }: EnvelopeRevealProps) {
   const [viewMode, setViewMode] = useState<'card' | 'postcard'>('card');
+  const [canShare, setCanShare] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !!navigator.share) {
+      setCanShare(true);
+    }
+  }, []);
 
   const handleClose = () => {
     if (onClose) {
@@ -50,6 +57,38 @@ export function EnvelopeReveal({
       download(dataUrl, `eid-wish-${senderName.replace(/\s+/g, '-').toLowerCase()}.png`);
     } catch (err) {
       console.error('Download failed', err);
+    }
+  }, [senderName]);
+
+  const handleShare = useCallback(async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!cardRef.current) return;
+    try {
+      const dataUrl = await toPng(cardRef.current, { 
+        cacheBust: true, 
+        backgroundColor: '#fff',
+        pixelRatio: 2,
+      });
+      
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], `eid-wish-${senderName.replace(/\s+/g, '-').toLowerCase()}.png`, { type: 'image/png' });
+
+      if (navigator.share) {
+        const shareData: ShareData = {
+          title: `Eid Wish from ${senderName}`,
+          text: `Check out this Eid wish I received from ${senderName}!`,
+        };
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareData.files = [file];
+        }
+
+        await navigator.share(shareData);
+      } else {
+        alert("Sharing is not supported on this browser. Please use the download button to save and share the image manually.");
+      }
+    } catch (err) {
+      console.error('Share failed', err);
     }
   }, [senderName]);
 
@@ -181,13 +220,22 @@ export function EnvelopeReveal({
                               className="w-full mx-auto"
                             />
                           </div>
-                          <button
-                            onClick={handleDownload}
-                            className="absolute bottom-3 right-3 p-2.5 bg-white/90 text-primary rounded-full shadow-md border border-primary/20 hover:bg-white hover:scale-105 transition-all z-20 md:opacity-0 md:group-hover:opacity-100"
-                            title="Download Wish"
-                          >
-                            <Download className="w-4 h-4" />
-                          </button>
+                          <div className="absolute bottom-3 right-3 flex items-center gap-2 md:opacity-0 md:group-hover:opacity-100 transition-all z-20">
+                            <button
+                              onClick={handleShare}
+                              className="p-2.5 bg-white/90 text-primary rounded-full shadow-md border border-primary/20 hover:bg-white hover:scale-105 transition-all"
+                              title="Share Wish"
+                            >
+                              <Share2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={handleDownload}
+                              className="p-2.5 bg-white/90 text-primary rounded-full shadow-md border border-primary/20 hover:bg-white hover:scale-105 transition-all"
+                              title="Download Wish"
+                            >
+                              <Download className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       );
                     }
@@ -204,13 +252,22 @@ export function EnvelopeReveal({
                               className="shadow-xl"
                             />
                           </div>
-                          <button
-                            onClick={handleDownload}
-                            className="absolute bottom-3 right-3 p-2.5 bg-white/90 text-primary rounded-full shadow-md border border-primary/20 hover:bg-white hover:scale-105 transition-all z-20 md:opacity-0 md:group-hover:opacity-100"
-                            title="Download Wish"
-                          >
-                            <Download className="w-4 h-4" />
-                          </button>
+                          <div className="absolute bottom-3 right-3 flex items-center gap-2 md:opacity-0 md:group-hover:opacity-100 transition-all z-20">
+                            <button
+                              onClick={handleShare}
+                              className="p-2.5 bg-white/90 text-primary rounded-full shadow-md border border-primary/20 hover:bg-white hover:scale-105 transition-all"
+                              title="Share Wish"
+                            >
+                              <Share2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={handleDownload}
+                              className="p-2.5 bg-white/90 text-primary rounded-full shadow-md border border-primary/20 hover:bg-white hover:scale-105 transition-all"
+                              title="Download Wish"
+                            >
+                              <Download className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       );
                     }
