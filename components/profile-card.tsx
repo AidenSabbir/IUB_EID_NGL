@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { toPng } from "html-to-image";
 import { Copy } from "lucide-react";
+import { cn } from "@/lib/utils";
 interface Profile {
   id: string;
   username: string;
@@ -24,7 +25,8 @@ export function ProfileCard({
   profile: Profile;
   isOwner?: boolean;
 }) {
-  const [copied, setCopied] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState(profile.full_name || "");
   const [isLoading, setIsLoading] = useState(false);
@@ -60,10 +62,10 @@ export function ProfileCard({
   const handleCopyLink = () => {
     const url = `${window.location.origin}/u/${profile.username}`;
     navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
   };
-  const fallbackCopyTextToClipboard = (text: string) => {
+  const fallbackCopyTextToClipboard = (text: string, isShareFallback: boolean = false) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
 
@@ -79,8 +81,13 @@ export function ProfileCard({
     try {
       const successful = document.execCommand('copy');
       if (successful) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        if (isShareFallback) {
+          setCopiedShare(true);
+          setTimeout(() => setCopiedShare(false), 2000);
+        } else {
+          setCopiedLink(true);
+          setTimeout(() => setCopiedLink(false), 2000);
+        }
       } else {
         console.error('Fallback: Copying text command was unsuccessful');
         alert('Failed to copy link automatically. Please copy it manually: ' + text);
@@ -110,7 +117,7 @@ export function ProfileCard({
         pixelRatio: 3,
         style: {
           transform: 'scale(1)',
-          borderRadius: '2rem',
+          borderRadius: '0.75rem',
         }
       });
 
@@ -129,14 +136,14 @@ export function ProfileCard({
 
         await navigator.share(shareData);
       } else {
-        fallbackCopyTextToClipboard(url);
+        fallbackCopyTextToClipboard(url, true);
       }
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") {
         return;
       } else {
         console.error("Share failed, falling back to copy", err);
-        fallbackCopyTextToClipboard(url);
+        fallbackCopyTextToClipboard(url, true);
       }
     } finally {
       setIsSharing(false);
@@ -179,7 +186,13 @@ export function ProfileCard({
       </motion.div>
 
       <CardContent className="pt-10 pb-10 px-8 flex flex-col items-center text-center relative z-10">
-        <div ref={cardRef} className="flex flex-col items-center w-full py-6 px-4 bg-transparent">
+        <div 
+          ref={cardRef} 
+          className={cn(
+            "flex flex-col items-center w-full py-8 px-6 transition-all duration-300",
+            isSharing ? "border-2 border-primary/40 rounded-xl bg-white shadow-2xl scale-[1.02]" : "bg-transparent"
+          )}
+        >
           <div className="relative mb-6">
             <Avatar className="size-28 border-4 border-background shadow-xl ring-2 ring-primary/60 ring-offset-4 ring-offset-background">
               <AvatarImage
@@ -195,7 +208,10 @@ export function ProfileCard({
             <motion.div
               animate={{ rotate: [-5, 5, -5] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              className="absolute -bottom-2 -right-2 bg-background text-primary p-2 rounded-full shadow-lg border-2 border-primary/40"
+              className={cn(
+                "absolute -bottom-2 -right-2 bg-background text-primary p-2 rounded-full shadow-lg border-2 border-primary/40",
+                isSharing && "opacity-0"
+              )}
             >
               <Moon className="w-5 h-5" fill="currentColor" />
             </motion.div>
@@ -239,7 +255,7 @@ export function ProfileCard({
                 <h2 className="text-3xl font-decorative text-foreground font-bold tracking-tight">
                   {profile.full_name || profile.username}
                 </h2>
-                {isOwner && (
+                {isOwner && !isSharing && (
                   <button
                     onClick={() => setIsEditing(true)}
                     className="ml-2 p-1.5 rounded-full hover:bg-primary/10 text-primary/40 hover:text-primary transition-all duration-300"
@@ -256,9 +272,16 @@ export function ProfileCard({
             <span>@{profile.username}</span>
           </p>
 
-          <div className="mt-2 text-primary py-3 px-6 rounded-xl font-spartan font-bold text-lg border-2 border-primary/50">
+          <div className="mt-6 text-primary py-3 px-4 rounded-2xl font-spartan font-bold text-xl border-2 border-primary/50 bg-primary/5 shadow-inner">
             Send me EID Wishes!🌙
           </div>
+
+          {isSharing && (
+            <div className="mt-8 pt-6 border-t border-primary/10 w-full flex flex-col items-center gap-1 opacity-80">
+              <p className="text-sm font-branding text-primary font-bold tracking-tight uppercase">Chand Postal</p>
+              <p className="text-[10px] text-muted-foreground font-mono italic">link: </p>
+            </div>
+          )}
         </div>
         <h3 className=" text-center font-bold font-mono flex justify-center items-center gap-2">
           Step 1: Copy the link
@@ -274,7 +297,7 @@ export function ProfileCard({
               onClick={handleCopyLink}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
             >
-              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copiedLink ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -290,7 +313,7 @@ export function ProfileCard({
               disabled={isSharing}
               aria-label="Share profile"
             >
-              {copied ? (
+              {copiedShare ? (
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
