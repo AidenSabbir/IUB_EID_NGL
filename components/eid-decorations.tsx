@@ -124,7 +124,7 @@ export function EidDecorations() {
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
           preserveAspectRatio="none"
-          style={{ maxHeight: '35vh', minHeight: '150px' }}
+          style={{ maxHeight: '35dvh', minHeight: '150px' }}
         >
           {/* Base */}
           <rect x="0" y="38" width="100" height="2" />

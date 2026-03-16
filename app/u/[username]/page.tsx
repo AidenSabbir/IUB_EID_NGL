@@ -98,7 +98,7 @@ export default function ProfilePage({
 }) {
   return (
     <>
-      <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center p-4 pb-32">
+      <div className="flex min-h-[calc(100dvh-64px)] flex-col items-center justify-center p-4 pb-32">
         <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
           <ProfileData paramsPromise={params} />
         </Suspense>

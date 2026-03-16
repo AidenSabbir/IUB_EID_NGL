@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body
-        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans flex flex-col min-h-screen`}
+        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans flex flex-col min-h-dvh`}
       >
         <div className="fixed inset-0 z-0 pointer-events-none bg-transparent">
           <EidDecorations />
