@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Mail, User, Moon } from "lucide-react"
 import { useUnreadCount } from "@/hooks/use-unread-count"
@@ -24,11 +25,7 @@ export function BottomNav() {
 
   return (
     <>
-      <aside className="hidden md:flex flex-col w-64 border-r border-border h-full bg-card p-4">
-        <div className="flex items-center gap-3 mb-8 px-2">
-          <Moon className="w-6 h-6 text-primary" />
-          <span className="font-decorative text-2xl font-semibold text-primary">{process.env.NEXT_PUBLIC_APP_NAME}</span>
-        </div>
+      <aside className="hidden md:flex flex-col w-64 border-r border-border min-h-full bg-card p-4">
         <nav className="flex flex-col gap-2">
           {tabs.map((tab) => {
             const Icon = tab.icon
@@ -38,11 +35,10 @@ export function BottomNav() {
               <Link
                 key={tab.name}
                 href={tab.href}
-                className={`relative flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
-                  isActive
-                    ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
+                className={`relative flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${isActive
+                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-lg">{tab.name}</span>
@@ -66,9 +62,8 @@ export function BottomNav() {
             <Link
               key={tab.name}
               href={tab.href}
-              className={`relative flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-                isActive ? "text-primary" : "text-muted-foreground"
-              }`}
+              className={`relative flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"
+                }`}
             >
               <div className="relative">
                 <Icon className={`w-6 h-6 ${isActive ? "fill-primary/20" : ""}`} />

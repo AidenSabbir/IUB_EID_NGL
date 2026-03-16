@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { BottomNav } from '@/components/bottom-nav'
+import { Footer } from '@/components/footer'
 
 async function AuthGuard({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -28,12 +29,13 @@ export default function ProtectedLayout({
   return (
     <Suspense>
       <AuthGuard>
-        <div className="flex h-[calc(100dvh-64px)] w-full">
+        <div className="flex min-h-[calc(100dvh-64px)] w-full">
           <BottomNav />
-          <div className="flex-1 flex flex-col h-full relative">
+          <div className="flex-1 flex flex-col relative pb-16 md:pb-0">
             <main className="flex-1 relative">
               {children}
             </main>
+            <Footer />
           </div>
         </div>
       </AuthGuard>

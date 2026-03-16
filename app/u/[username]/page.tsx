@@ -7,6 +7,7 @@ import { ComposeForm } from "@/components/compose-form";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import { Footer } from "@/components/footer";
 
 export async function generateMetadata({
   params,
@@ -91,12 +92,13 @@ export default function ProfilePage({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <>
-      <div className="flex min-h-[calc(100dvh-64px)] flex-col items-center justify-center p-4">
+    <div className="flex min-h-dvh flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center p-4">
         <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
           <ProfileData paramsPromise={params} />
         </Suspense>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }

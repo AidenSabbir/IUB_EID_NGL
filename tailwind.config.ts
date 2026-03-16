@@ -14,6 +14,7 @@ export default {
         sans: ["var(--font-cairo)"],
         serif: ["var(--font-amiri)"],
         decorative: ["var(--font-aref-ruqaa)"],
+        branding: ["var(--font-space-grotesk)"],
       },
       colors: {
         background: "hsl(var(--background))",
