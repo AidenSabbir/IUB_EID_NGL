@@ -52,7 +52,8 @@ export function EnvelopeReveal({
       const dataUrl = await toPng(cardRef.current, { 
         cacheBust: true, 
         backgroundColor: '#fff',
-        pixelRatio: 2,
+        pixelRatio: 4,
+        quality: 1,
       });
       download(dataUrl, `eid-wish-${senderName.replace(/\s+/g, '-').toLowerCase()}.png`);
     } catch (err) {
@@ -67,7 +68,8 @@ export function EnvelopeReveal({
       const dataUrl = await toPng(cardRef.current, { 
         cacheBust: true, 
         backgroundColor: '#fff',
-        pixelRatio: 2,
+        pixelRatio: 4,
+        quality: 1,
       });
       
       const blob = await (await fetch(dataUrl)).blob();
