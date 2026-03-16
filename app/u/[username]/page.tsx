@@ -7,6 +7,7 @@ import { ComposeForm } from "@/components/compose-form";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import { Footer } from "@/components/footer";
 
 export async function generateMetadata({
   params,
@@ -71,17 +72,11 @@ async function ProfileData({ paramsPromise }: { paramsPromise: Promise<{ usernam
 
       {user?.id !== profile.id ? (
         <div className="bg-card border-border rounded-xl shadow-sm overflow-hidden p-6">
-          <div className="text-center mb-6">
-            <h3 className="text-xl font-serif font-medium text-foreground">Send an Eid Wish</h3>
-            <p className="text-muted-foreground text-sm mt-1">
-              Your message will be safely sealed until Eid.
-            </p>
-          </div>
           <ComposeForm recipient={profile} senderId={user?.id} />
         </div>
       ) : (
         <div className="text-center p-6 bg-secondary/50 rounded-xl border border-primary/20">
-          <h3 className="text-lg font-serif font-medium text-foreground mb-2">This is your public page</h3>
+          <h3 className="text-lg font-decorative font-medium text-foreground mb-2">This is your public page</h3>
           <p className="text-muted-foreground text-sm">
             Share this link with your friends and family so they can send you Eid wishes!
           </p>
@@ -97,12 +92,13 @@ export default function ProfilePage({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <>
-      <div className="flex min-h-[calc(100dvh-64px)] flex-col items-center justify-center p-4 pb-32">
+    <div className="flex min-h-dvh flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center p-4">
         <Suspense fallback={<div className="text-muted-foreground">Loading profile...</div>}>
           <ProfileData paramsPromise={params} />
         </Suspense>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }

@@ -29,7 +29,7 @@ export default async function InboxPage() {
     .single();
 
   return (
-    <div className="flex flex-col w-full max-w-3xl mx-auto p-12 md:p-6 space-y-6">
+    <div className="flex flex-col w-full max-w-3xl mx-auto p-8 md:p-6">
       <InboxClient
         initialMessages={messages || []}
         unlockTime={unlockTime}

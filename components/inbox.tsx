@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Lock, MailOpen, Check, Copy, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { EnvelopeReveal } from "@/components/envelope-reveal";
 import { useEidUnlock } from "@/hooks/use-eid-unlock";
 import { useUnreadCount } from "@/hooks/use-unread-count"
+import Image from "next/image";
 interface Message {
   id: string;
   sender_id: string | null;
@@ -35,10 +37,22 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
   const [mounted, setMounted] = useState(false);
   const { unreadCount } = useUnreadCount()
   const { isUnlocked, timeRemaining } = useEidUnlock(new Date(unlockTime));
+  const router = useRouter();
+  const wasLockedRef = useRef(!isUnlocked);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isUnlocked && wasLockedRef.current) {
+      wasLockedRef.current = false;
+      setSelectedMessage(null);
+      router.refresh();
+    } else if (!isUnlocked && !wasLockedRef.current) {
+      wasLockedRef.current = true;
+    }
+  }, [isUnlocked, router]);
 
   const handleCopyLink = () => {
     const url = `${window.location.origin}/u/${username}`;
@@ -86,7 +100,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
         <Card className="bg-primary/40 border-primary/30 backdrop-blur-sm shadow-md">
           <CardContent className="p-2 flex flex-col items-center justify-center space-y-2">
             <Lock className="w-12 h-12 text-primary" />
-            <h2 className="text-2xl font-serif font-semibold text-foreground text-center">
+            <h2 className="text-2xl font-decorative font-semibold text-foreground text-center">
               Eid Messages Locked
             </h2>
             <p className="text-muted-foreground text-center max-w-md">
@@ -105,7 +119,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
 
       {isUnlocked && (
         <div className="bg-primary/20 border border-primary/30 rounded-xl p-6 text-center shadow-sm">
-          <h2 className="text-2xl font-serif font-semibold text-primary mb-2">
+          <h2 className="text-2xl font-decorative font-semibold text-primary mb-2">
             Eid Mubarak!
           </h2>
           <p className="text-muted-foreground">
@@ -116,7 +130,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
 
       <div className="flex flex-col items-center justify-center p-6 bg-card border border-primary/20 rounded-xl shadow-sm space-y-4">
         <div className="text-center">
-          <h3 className="text-lg font-serif font-semibold text-primary">Share Your Profile</h3>
+          <h3 className="text-lg font-decorative font-semibold text-primary">Share Your Profile</h3>
           <p className="text-sm text-muted-foreground">Receive more Eid wishes from your friends!</p>
         </div>
         <div className="flex w-full max-w-sm items-center space-x-2">
@@ -136,7 +150,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
         </div>
       </div>
       <div className="flex items-center space-x-3 relative">
-        <h1 className="text-3xl font-serif font-bold text-primary">
+        <h1 className="text-3xl font-decorative font-bold text-primary">
           Your Inbox
         </h1>
         {unreadCount > 0 ? (
@@ -191,7 +205,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
                     style={{ clipPath: 'polygon(0 100%, 50% 0, 100% 100%)' }}
                   >
                     <div className="absolute bottom-3 left-0 right-0 text-center flex flex-col items-center">
-                      <span className="text-[10px] sm:text-xs font-serif text-primary font-medium truncate px-4 w-full">
+                      <span className="text-[10px] sm:text-xs font-decorative text-primary font-medium truncate px-4 w-full">
                         From: {isUnlocked
                           ? (message.is_anonymous ? "Anonymous" : (message.sender_name || message.sender_full_name || message.sender_username || "Someone"))
                           : (message.is_anonymous ? "A********" : `${(message.sender_name || message.sender_full_name || message.sender_username || "Someone").charAt(0)}****`)}
@@ -211,10 +225,10 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
                   />
 
                   {/* Wax Seal */}
-                  <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center shadow-md border-2 border-primary/40">
+                  <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#4A3B2C] flex items-center justify-center shadow-md border-2 border-white/40">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-primary-foreground/50 flex items-center justify-center">
                       {isUnlocked ? (
-                        message.is_read ? <MailOpen className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" /> : <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
+                        message.is_read ? <MailOpen className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" /> : <Image src="/chand_icon.png" alt="Moon" width={50} height={50} className="w-6 h-6 inline-block text-primary" />
                       ) : (
                         <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
                       )}

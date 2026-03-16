@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Playfair_Display, Great_Vibes } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next"
+import { Cairo, Amiri, Aref_Ruqaa, Space_Grotesk, Press_Start_2P } from "next/font/google";
 import { EidDecorations } from "@/components/eid-decorations";
 import { DecorativeLights } from "@/components/decorative-lights";
 import { TopNav } from "@/components/top-nav";
+import { Footer } from "@/components/footer";
 import "./globals.css";
+import Script from "next/script";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -11,32 +14,53 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: `${process.env.NEXT_PUBLIC_APP_NAME} 🌙`,
-  description: "Send heartfelt Eid wishes to your loved ones",
+  title: "Chand Postal | IUB Programming Club",
+  description:
+    "Chand Postal is an Eid greeting platform by IUB Programming Club where you can send digital Eid cards to your loved ones that open on Chand Raat.",
+  icons: {
+    icon: "/chand_icon.png",
+    apple: "/chand_icon.png",
+  },
   openGraph: {
-    title: `${process.env.NEXT_PUBLIC_APP_NAME} 🌙`,
-    description: "Send heartfelt Eid wishes to your loved ones",
+    title: "Chand Postal | IUB Programming Club",
+    description:
+      "Send digital Eid cards to your friends and family and let them open your wishes on Chand Raat.",
     url: defaultUrl,
     type: "website",
+    siteName: "Chand Postal",
   },
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const cairo = Cairo({
+  variable: "--font-cairo",
   display: "swap",
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
+const amiri = Amiri({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-amiri",
   display: "swap",
 });
 
-const greatVibes = Great_Vibes({
+const arefRuqaa = Aref_Ruqaa({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-aref-ruqaa",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const pressStart2P = Press_Start_2P({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-great-vibes",
+  variable: "--font-press-start",
   display: "swap",
 });
 
@@ -48,18 +72,32 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body
-        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans flex flex-col min-h-dvh`}
+        className={`${cairo.variable} ${amiri.variable} ${arefRuqaa.variable} ${spaceGrotesk.variable} ${pressStart2P.variable} antialiased font-sans flex flex-col min-h-dvh`}
       >
+        {/* Analytics Scripts */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QXJ6GZJQKF"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QXJ6GZJQKF');
+          `}
+        </Script>
         <div className="fixed inset-0 z-0 pointer-events-none bg-transparent">
           <EidDecorations />
           <DecorativeLights />
         </div>
         <div className="relative z-10 flex flex-col flex-1 h-full">
           <TopNav />
-          <div className="flex-1 pb-24 md:pb-0">
+          <div className="flex-1">
             {children}
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );

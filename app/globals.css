@@ -4,11 +4,16 @@
 
 @layer base {
   :root {
-    --background: 36 33% 95%;      /* #F7F4EF cream */
-    --foreground: 28 27% 23%;      /* #4A3B2C warm brown */
-    --card: 0 0% 100%;             /* #FFFFFF */
+    --background: 36 33% 95%;
+    /* #F7F4EF cream */
+    --foreground: 28 27% 23%;
+    /* #4A3B2C warm brown */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
     --card-foreground: 28 27% 23%;
-    --primary: 33 35% 53%;         /* #B38B59 gold */
+    --primary: 30 35% 30%;
+    /* --primary: 33 35% 53%; */
+    /* #B38B59 gold */
     --primary-foreground: 0 0% 100%;
     --secondary: 36 33% 90%;
     --secondary-foreground: 28 27% 23%;
@@ -18,7 +23,8 @@
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 33 35% 53%;          /* gold borders */
+    --border: 33 35% 53%;
+    /* gold borders */
     --input: 33 25% 80%;
     --ring: 33 35% 53%;
     --radius: 0.75rem;
@@ -29,11 +35,18 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-sans);
+    font-family: var(--font-cairo), sans-serif;
   }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif), serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-amiri), serif;
   }
 }

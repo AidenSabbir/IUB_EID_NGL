@@ -168,7 +168,7 @@ export function ProfileCard({
               alt={profile.full_name || profile.username}
               referrerPolicy="no-referrer"
             />
-            <AvatarFallback className="text-3xl bg-primary/20 text-primary font-serif font-bold">
+            <AvatarFallback className="text-3xl bg-primary/20 text-primary font-decorative font-bold">
               {(profile.full_name || profile.username).charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -190,7 +190,7 @@ export function ProfileCard({
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter your name"
-                className="w-full text-center text-2xl font-serif border-b-2 border-primary bg-transparent focus:outline-none focus:border-primary/60 transition-colors py-1"
+                className="w-full text-center text-2xl font-decorative border-b-2 border-primary bg-transparent focus:outline-none focus:border-primary/60 transition-colors py-1"
                 autoFocus
               />
               <div className="flex gap-2">
@@ -217,7 +217,7 @@ export function ProfileCard({
             </div>
           ) : (
             <div className="group relative flex items-center justify-center mb-1">
-              <h2 className="text-3xl font-serif text-foreground font-bold tracking-tight">
+              <h2 className="text-3xl font-decorative text-foreground font-bold tracking-tight">
                 {profile.full_name || profile.username}
               </h2>
               {isOwner && (
