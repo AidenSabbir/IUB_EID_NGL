@@ -114,10 +114,14 @@ export function ProfileCard({
       const dataUrl = await toPng(cardRef.current, {
         cacheBust: true,
         backgroundColor: '#f8fafc',
-        pixelRatio: 3,
+        pixelRatio: 4,
+        skipFonts: false,
+        fontEmbedCSS: '',
         style: {
           transform: 'scale(1)',
           borderRadius: '0.75rem',
+          width: `${cardRef.current.offsetWidth}px`,
+          height: `${cardRef.current.offsetHeight}px`,
         }
       });
 
