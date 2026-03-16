@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Playfair_Display, Great_Vibes } from "next/font/google";
+import { Cairo, Amiri, Aref_Ruqaa } from "next/font/google";
 import { EidDecorations } from "@/components/eid-decorations";
 import { DecorativeLights } from "@/components/decorative-lights";
 import { TopNav } from "@/components/top-nav";
@@ -21,22 +21,23 @@ export const metadata: Metadata = {
   },
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const cairo = Cairo({
+  variable: "--font-cairo",
   display: "swap",
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
+const amiri = Amiri({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-amiri",
   display: "swap",
 });
 
-const greatVibes = Great_Vibes({
-  weight: "400",
+const arefRuqaa = Aref_Ruqaa({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-great-vibes",
+  variable: "--font-aref-ruqaa",
   display: "swap",
 });
 
@@ -48,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body
-        className={`${geistSans.className} ${playfair.variable} ${greatVibes.variable} antialiased font-sans flex flex-col min-h-dvh`}
+        className={`${cairo.variable} ${amiri.variable} ${arefRuqaa.variable} antialiased font-sans flex flex-col min-h-dvh`}
       >
         <div className="fixed inset-0 z-0 pointer-events-none bg-transparent">
           <EidDecorations />

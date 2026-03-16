@@ -61,8 +61,8 @@ export function EnvelopeReveal({
             <div
               className="mb-5 pb-2 border-b border-primary/30 flex flex-col items-center text-center"
             >
-              <p className="text-muted-foreground mb-1 uppercase tracking-widest font-serif">From</p>
-              <h3 className="text-2xl font-serif text-primary font-semibold">
+              <p className="text-muted-foreground mb-1 uppercase tracking-widest font-decorative">From</p>
+              <h3 className="text-2xl font-decorative text-primary font-semibold">
                 {senderName}
               </h3>
               {createdAt && (
@@ -96,7 +96,7 @@ export function EnvelopeReveal({
                     />
                     <div className="text-center text-primary/80 mt-4 flex flex-col items-center">
                       <Lock className="w-5 h-5 mb-2" />
-                      <p className="text-sm font-serif tracking-wide text-primary/90 font-medium">Content Sealed until Eid</p>
+                      <p className="text-sm font-decorative tracking-wide text-primary/90 font-medium">Content Sealed until Eid</p>
                       <p className="text-xs text-primary/80 text-center max-w-xs mt-2">
                         Come back on Eid to reveal the full message and the sender&apos;s identity.
                       </p>

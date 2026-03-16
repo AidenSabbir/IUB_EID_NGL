@@ -86,7 +86,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
         <Card className="bg-primary/40 border-primary/30 backdrop-blur-sm shadow-md">
           <CardContent className="p-2 flex flex-col items-center justify-center space-y-2">
             <Lock className="w-12 h-12 text-primary" />
-            <h2 className="text-2xl font-serif font-semibold text-foreground text-center">
+            <h2 className="text-2xl font-decorative font-semibold text-foreground text-center">
               Eid Messages Locked
             </h2>
             <p className="text-muted-foreground text-center max-w-md">
@@ -105,7 +105,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
 
       {isUnlocked && (
         <div className="bg-primary/20 border border-primary/30 rounded-xl p-6 text-center shadow-sm">
-          <h2 className="text-2xl font-serif font-semibold text-primary mb-2">
+          <h2 className="text-2xl font-decorative font-semibold text-primary mb-2">
             Eid Mubarak!
           </h2>
           <p className="text-muted-foreground">
@@ -116,7 +116,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
 
       <div className="flex flex-col items-center justify-center p-6 bg-card border border-primary/20 rounded-xl shadow-sm space-y-4">
         <div className="text-center">
-          <h3 className="text-lg font-serif font-semibold text-primary">Share Your Profile</h3>
+          <h3 className="text-lg font-decorative font-semibold text-primary">Share Your Profile</h3>
           <p className="text-sm text-muted-foreground">Receive more Eid wishes from your friends!</p>
         </div>
         <div className="flex w-full max-w-sm items-center space-x-2">
@@ -136,7 +136,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
         </div>
       </div>
       <div className="flex items-center space-x-3 relative">
-        <h1 className="text-3xl font-serif font-bold text-primary">
+        <h1 className="text-3xl font-decorative font-bold text-primary">
           Your Inbox
         </h1>
         {unreadCount > 0 ? (
@@ -191,7 +191,7 @@ export function InboxClient({ initialMessages, unlockTime, username }: InboxClie
                     style={{ clipPath: 'polygon(0 100%, 50% 0, 100% 100%)' }}
                   >
                     <div className="absolute bottom-3 left-0 right-0 text-center flex flex-col items-center">
-                      <span className="text-[10px] sm:text-xs font-serif text-primary font-medium truncate px-4 w-full">
+                      <span className="text-[10px] sm:text-xs font-decorative text-primary font-medium truncate px-4 w-full">
                         From: {isUnlocked
                           ? (message.is_anonymous ? "Anonymous" : (message.sender_name || message.sender_full_name || message.sender_username || "Someone"))
                           : (message.is_anonymous ? "A********" : `${(message.sender_name || message.sender_full_name || message.sender_username || "Someone").charAt(0)}****`)}

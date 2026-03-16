@@ -52,7 +52,7 @@ export function EidCard({ cardConfig, message, className, fontSize }: EidCardPro
             color: cardConfig.color,
             textAlign: cardConfig.align,
             fontSize: computedFontSize,
-            fontFamily: 'var(--font-great-vibes), cursive',
+            fontFamily: 'var(--font-aref-ruqaa), serif',
             textShadow: '0 2px 4px rgba(0,0,0,0.1)',
             lineHeight: '1.4',
           }}

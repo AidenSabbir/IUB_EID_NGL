@@ -113,16 +113,14 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   if (isSuccess) {
     return (
       <div className="flex flex-col items-center justify-center p-6 text-center bg-white rounded-xl border border-emerald-100 shadow-sm space-y-4">
-        <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-2">
-          <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-        </div>
-        <h3 className="text-2xl font-serif text-emerald-950 font-medium">
-          Card Sent Successfully!
+         <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+        <h3 className="text-xl font-decorative text-emerald-950 font-medium">
+         Card Sent Successfully!
         </h3>
-        <p className="text-emerald-800/80">
+        <p className="text-emerald-900">
           Your Eid Card has been delivered to @{recipient.username}.
         </p>
-        
+
         {senderId ? (
           <Button
             onClick={() => setIsSuccess(false)}
@@ -133,7 +131,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         ) : (
           <div className="w-full pt-4 space-y-4 border-t border-emerald-50">
             <div className="space-y-2">
-              <h4 className="font-serif font-semibold text-primary">Receive your Eid Wishes</h4>
+              <h4 className="font-decorative font-semibold text-primary text-xl">Receive your Eid Wishes</h4>
               <p className="text-sm text-muted-foreground">
                 Sign up and share your link to get anonymous messages from your friends!
               </p>
@@ -170,7 +168,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
             {isAnonymous ? <ShieldCheck className="w-6 h-6" /> : <UserCircle className="w-6 h-6" />}
           </div>
           <div className="space-y-1">
-            <label className="text-base font-serif font-semibold text-amber-950">
+            <label className="text-base font-decorative font-semibold text-amber-950">
               1. Stay Anonymous
             </label>
             <p className="text-sm text-amber-800/70 leading-tight">
@@ -226,7 +224,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
             </DialogContent>
           </Dialog>
         </div>
-        
+
         <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
           <div className="w-full max-w-[350px] flex justify-center">
             <PostcardPreview

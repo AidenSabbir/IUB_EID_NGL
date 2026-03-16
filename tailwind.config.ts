@@ -11,8 +11,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ["var(--font-serif)"],
-        "great-vibes": ["var(--font-great-vibes)"],
+        sans: ["var(--font-cairo)"],
+        serif: ["var(--font-amiri)"],
+        decorative: ["var(--font-aref-ruqaa)"],
       },
       colors: {
         background: "hsl(var(--background))",

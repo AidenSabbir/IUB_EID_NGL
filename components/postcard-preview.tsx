@@ -26,7 +26,7 @@ export function PostcardPreview({ stampId, senderHint, date, className }: Postca
         priority
       />
       <div
-        className="absolute flex items-end font-serif -translate-y-1/2"
+        className="absolute flex items-end font-decorative -translate-y-1/2"
         style={{
           top: config.nameRect.top,
           left: config.nameRect.left,
@@ -43,7 +43,7 @@ export function PostcardPreview({ stampId, senderHint, date, className }: Postca
         </span>
       </div>
       <div
-        className="absolute flex items-end font-serif -translate-y-1/2"
+        className="absolute flex items-end font-decorative -translate-y-1/2"
         style={{
           top: config.dateRect.top,
           left: config.dateRect.left,

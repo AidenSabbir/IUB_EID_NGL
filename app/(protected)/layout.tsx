@@ -28,10 +28,10 @@ export default function ProtectedLayout({
   return (
     <Suspense>
       <AuthGuard>
-        <div className="flex h-[calc(100dvh-64px)] w-full overflow-hidden">
+        <div className="flex h-[calc(100dvh-64px)] w-full">
           <BottomNav />
-          <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-            <main className="flex-1 overflow-y-auto relative">
+          <div className="flex-1 flex flex-col h-full relative">
+            <main className="flex-1 relative">
               {children}
             </main>
           </div>
