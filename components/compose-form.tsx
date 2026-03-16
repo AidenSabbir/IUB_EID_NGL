@@ -12,7 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { createClient } from "@/lib/supabase/client";
-import { CheckCircle2, Send, Loader2, Maximize2, ShieldCheck, UserCircle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CheckCircle2, Send, Loader2, ShieldCheck, UserCircle } from "lucide-react";
 import { EID_CARDS } from "@/lib/eid-cards";
 import { STAMPS } from "@/lib/stamps";
 import { EidCard } from "@/components/eid-card";
@@ -113,9 +114,9 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   if (isSuccess) {
     return (
       <div className="flex flex-col items-center justify-center p-6 text-center bg-white rounded-xl border border-emerald-100 shadow-sm space-y-4">
-         <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+        <CheckCircle2 className="w-6 h-6 text-emerald-600" />
         <h3 className="text-xl font-decorative text-emerald-950 font-medium">
-         Card Sent Successfully!
+          Card Sent Successfully!
         </h3>
         <p className="text-emerald-900">
           Your Eid Card has been delivered to @{recipient.username}.
@@ -204,25 +205,6 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <Label className="text-sm font-medium text-amber-950">2. Choose a Postcard (Front)</Label>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
-                <Maximize2 className="w-3 h-3 mr-1.5" />
-                Full View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
-              <DialogTitle className="sr-only">Full View Preview</DialogTitle>
-              <div className="w-full flex justify-center">
-                <PostcardPreview
-                  stampId={selectedStampId}
-                  senderHint={isAnonymous ? "Anonymous" : senderName.trim() ? `${senderName}` : "Y***"}
-                  date={new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                  className="shadow-2xl"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
         </div>
 
         <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 flex flex-col items-center">
@@ -264,25 +246,6 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <Label className="text-sm font-medium text-amber-950">3. Choose a Card Design (Inside)</Label>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 text-xs border-amber-200 text-amber-700 hover:bg-amber-50">
-                <Maximize2 className="w-3 h-3 mr-1.5" />
-                Full View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
-              <DialogTitle className="sr-only">Full View Preview</DialogTitle>
-              <div className="w-full flex justify-center">
-                <EidCard
-                  cardConfig={selectedCard}
-                  message={content}
-                  fontSize={`${fontSize}px`}
-                  className="shadow-2xl"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
         </div>
 
         <div className="grid grid-cols-4 gap-3">
