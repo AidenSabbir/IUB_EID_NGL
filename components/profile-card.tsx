@@ -111,19 +111,30 @@ export function ProfileCard({
     try {
       if (!cardRef.current) throw new Error("Card ref not found");
 
-      const dataUrl = await toPng(cardRef.current, {
+      const node = cardRef.current;
+      
+      const rect = node.getBoundingClientRect();
+      const scrollWidth = node.scrollWidth;
+      const scrollHeight = node.scrollHeight;
+      
+      const actualWidth = Math.max(rect.width, scrollWidth);
+      const actualHeight = Math.max(rect.height, scrollHeight);
+
+      const dataUrl = await toPng(node, {
         cacheBust: true,
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#ffffff',
         pixelRatio: 4,
-        skipFonts: false,
-        fontEmbedCSS: '',
-        width: cardRef.current.scrollWidth,
-        height: cardRef.current.scrollHeight,
+        width: actualWidth,
+        height: actualHeight,
         style: {
           transform: 'none',
-          borderRadius: '0.75rem',
+          borderRadius: '1.5rem',
           margin: '0',
-          padding: '24px',
+          padding: '0',
+          maxHeight: 'none',
+          maxWidth: 'none',
+          overflow: 'visible',
+          display: 'block',
         }
       });
 
@@ -157,13 +168,22 @@ export function ProfileCard({
   };
 
   return (
-    <Card 
+    <div 
       ref={cardRef}
-      className={cn(
-        "w-full max-w-md mx-auto relative overflow-hidden transition-all duration-300",
-        isSharing ? "border-2 border-primary/40 rounded-xl bg-white shadow-2xl scale-100" : "border-primary/40 bg-card/95 backdrop-blur-md rounded-[2rem] shadow-[0_0_40px_-15px_rgba(234,179,8,0.4)]"
-      )}
+      style={{
+        display: 'block',
+        position: 'relative',
+        width: 'fit-content',
+        minWidth: '100%',
+        overflow: 'visible',
+      }}
     >
+      <Card 
+        className={cn(
+          "w-full max-w-md mx-auto relative overflow-hidden transition-all duration-300",
+          isSharing ? "border-4 border-primary/50 rounded-2xl bg-white shadow-2xl scale-100" : "border-primary/40 bg-card/95 backdrop-blur-md rounded-[2rem] shadow-[0_0_40px_-15px_rgba(234,179,8,0.4)]"
+        )}
+      >
       {!isSharing && (
         <>
           <motion.div
@@ -359,5 +379,6 @@ export function ProfileCard({
         )}
       </CardContent>
     </Card>
+    </div>
   );
 }
