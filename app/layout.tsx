@@ -13,6 +13,18 @@ const defaultUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
+  verification: {
+    google: "E-DaXcraPREvpHr7O2ol8wCjoiNaXGEdN7aW9mMQhT4",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  authors: [
+    { name: 'Md Rashedul Islam Sabbir', url: 'https://risabbir.vercel.app/' },
+    { name: 'Zaid Fahad', url: 'https://zaidfahad.com/' },
+    { name: 'IUB Programming Club', url: 'https://iubpc.vercel.app/' },
+  ],
   title: "Chand Postal | IUB Programming Club",
   description:
     "Chand Postal is an Eid greeting platform by IUB Programming Club where you can send digital Eid cards to your loved ones that open on Chand Raat.",
@@ -81,6 +93,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
+      <meta name="google-site-verification" content="E-DaXcraPREvpHr7O2ol8wCjoiNaXGEdN7aW9mMQhT4" />
       <body
         className={`${cairo.variable} ${amiri.variable} ${arefRuqaa.variable} ${spaceGrotesk.variable} ${pressStart2P.variable} antialiased font-sans flex flex-col min-h-dvh`}
       >
