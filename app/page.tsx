@@ -1,6 +1,12 @@
-import { redirect } from "next/navigation";
-
-
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 export default function Home() {
-  if (window.location.pathname !== '/googlea1061e93d1208ad4.html') { redirect("/inbox"); }
+  const router = useRouter();
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path !== "/googlea1061e93d1208ad4.html") {
+      router.push("/inbox");
+    }
+  }, []);
 }

@@ -30,9 +30,10 @@ export async function generateMetadata({
     };
   }
 
-  const defaultUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  const defaultUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://chandpostal.vercel.app"
+      : "http://localhost:3000";
 
   const title = `****** | ${process.env.NEXT_PUBLIC_APP_NAME}`;
   const description = `Send an anonymous Eid wish`;
