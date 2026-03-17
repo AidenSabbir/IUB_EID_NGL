@@ -34,7 +34,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
   const [selectedCardId, setSelectedCardId] = useState<string>(EID_CARDS[0].id);
   const [selectedStampId, setSelectedStampId] = useState<string>(STAMPS[0].id);
   const [content, setContent] = useState("");
-  const [fontSize, setFontSize] = useState<number>(24);
+  const [fontSize, setFontSize] = useState<number>(12);
   const [senderName, setSenderName] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -313,7 +313,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         <Slider
           value={[fontSize]}
           onValueChange={(vals) => setFontSize(vals[0])}
-          min={12}
+          min={10}
           max={48}
           step={1}
           className="py-2"
