@@ -30,6 +30,14 @@ export const metadata: Metadata = {
     url: defaultUrl,
     type: "website",
     siteName: "Chand Postal",
+    images: [
+      {
+        url: "/metadata.png",
+        width: 1200,
+        height: 630,
+        alt: "Chand Postal Eid Card",
+      },
+    ],
   },
 };
 
