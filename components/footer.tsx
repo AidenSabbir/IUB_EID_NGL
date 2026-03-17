@@ -37,11 +37,51 @@ export function Footer() {
           </a>
         </div>
 
-        <div className="flex flex-col items-center space-y-2 pt-2 border-t border-border/50 w-full max-w-sm text-center">
+        {/* <div className="flex flex-col items-center space-y-2 pt-2 border-t border-border/50 w-full max-w-sm text-center">
           <p className="text-xs text-muted-foreground flex flex-col items-center gap-1">
             <span className="flex items-center gap-1">Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> for the community </span><a href="https://risabbir.vercel.app" className="font-bold flex items-center gap-1">Lead Dev - <span className="text-foreground">Rashedul Islam Sabbir</span></a>
           </p>
-        </div>
+        </div> */}
+
+<div className="flex flex-col items-center space-y-4 pt-8 border-t border-gray-100 w-full max-w-md text-center mx-auto">
+  {/* Heart Line */}
+  <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] flex items-center gap-1.5">
+    Made with <Heart className="w-3 h-3 text-red-500 fill-red-500 animate-pulse" /> for the community
+  </p>
+
+  <div className="space-y-1">
+    {/* Developers */}
+    <p className="text-[11px] text-gray-500 font-medium">
+      Developed by{" "}
+      <a 
+        href="https://risabbir.vercel.app" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="text-gray-900 font-black hover:text-blue-600 transition-colors underline decoration-gray-200 underline-offset-4"
+      >
+        Rashedul Islam Sabbir
+      </a>
+      {" "}&{" "}
+      <a 
+        href="https://zaidfahad.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="text-gray-900 font-black hover:text-blue-600 transition-colors underline decoration-gray-200 underline-offset-4"
+      >
+        Zaid Fahad
+      </a>
+    </p>
+
+    {/* Graphics */}
+    <p className="text-[11px] text-gray-500 font-medium">
+      Graphics by{" "}
+      <span className="text-gray-900 font-black">Ikram Hossain Akif</span>
+      {" "}&{" "}
+      <span className="text-gray-900 font-black">Ahmed Zuhayer</span>
+    </p>
+  </div>
+</div>
+        
       </div>
     </footer>
   );
