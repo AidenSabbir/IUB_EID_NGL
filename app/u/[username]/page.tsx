@@ -19,7 +19,7 @@ export async function generateMetadata({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, username, full_name")
+    .select("id, username, full_name, avatar_url")
     .ilike("username", username)
     .single();
 
@@ -35,7 +35,7 @@ export async function generateMetadata({
       ? "https://chandpostal.vercel.app"
       : "http://localhost:3000";
 
-  const title = `****** | ${process.env.NEXT_PUBLIC_APP_NAME}`;
+  const title = `${profile.full_name} | ${process.env.NEXT_PUBLIC_APP_NAME}`;
   const description = `Send an anonymous Eid wish`;
   const pageUrl = `${defaultUrl}/u/${username}`;
 
@@ -47,6 +47,14 @@ export async function generateMetadata({
       description,
       url: pageUrl,
       type: "profile",
+      images: [
+        {
+          url: profile.avatar_url,
+          width: 1200,
+          height: 630,
+          alt: "Chand Postal Eid Card",
+        },
+      ],
     },
   };
 }

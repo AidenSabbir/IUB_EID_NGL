@@ -7,6 +7,29 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Footer } from '@/components/footer'
 
+const ONBOARDING_STEPS = [
+  {
+    id: 1,
+    text: "Start by logging into your account using your credentials.",
+  },
+  {
+    id: 2,
+    text: "Once you're in, share your profile with your friends so they can connect with you.",
+  },
+  {
+    id: 3,
+    text: "Your friends can send you Eid cards directly through your profile.",
+  },
+  {
+    id: 4,
+    text: "All the Eid cards you receive will be saved, but they will remain locked and hidden until Eid day.",
+  },
+  {
+    id: 5,
+    text: "On Eid, all your received cards will automatically unlock and appear on your profile for you to view.",
+  },
+]
+
 export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     const supabase = createClient()
@@ -21,7 +44,37 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-dvh flex-col">
       <main className="flex-1 flex flex-col items-center justify-center p-4">
-        <Card className="w-full max-w-sm border-2 border-primary/40 shadow-xl">
+        <Card className="w-full max-w-sm mb-5 border border-primary/10 bg-gradient-to-b from-card/80 to-card/40 backdrop-blur-md shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+          <CardContent className="pt-8 px-8 pb-10">
+            <div className="flex flex-col items-center mb-8">
+              <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-primary/70 mb-1">
+                How to use
+              </h3>
+              <div className="h-px w-8 bg-primary/20" />
+            </div>
+            
+            <div className="relative space-y-5">
+              <div className="absolute left-[13px] top-2 bottom-2 w-[1px] bg-gradient-to-b from-primary/30 via-primary/10 to-transparent" />
+              
+              {ONBOARDING_STEPS.map((step) => (
+                <div key={step.id} className="relative flex items-start gap-5 group">
+                  <div className="flex-none w-7 h-7 rounded-full bg-card border border-primary/20 flex items-center justify-center text-[11px] font-black text-primary/80 z-10 shadow-sm transition-colors group-hover:border-primary/40 group-hover:text-primary">
+                    {step.id}
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-[13px] text-muted-foreground leading-relaxed font-medium transition-colors group-hover:text-foreground/80">
+                      {step.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+          <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute -top-12 -left-12 w-24 h-24 bg-primary/5 rounded-full blur-3xl" />
+        </Card>
+        <Card className="w-full mb-10 max-w-sm border-2 border-primary/40 shadow-xl">
           <CardHeader className="text-center space-y-6 pt-10">
             <CardTitle className="text-xl font-branding text-foreground flex justify-center items-center gap-3">
               <div className="flex items-center gap-2">
