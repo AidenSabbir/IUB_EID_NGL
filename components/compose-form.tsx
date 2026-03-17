@@ -313,7 +313,7 @@ export function ComposeForm({ recipient, senderId }: ComposeFormProps) {
         <Slider
           value={[fontSize]}
           onValueChange={(vals) => setFontSize(vals[0])}
-          min={10}
+          min={5}
           max={48}
           step={1}
           className="py-2"
