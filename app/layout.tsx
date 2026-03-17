@@ -4,19 +4,21 @@ import { Cairo, Amiri, Aref_Ruqaa, Space_Grotesk, Press_Start_2P } from "next/fo
 import { EidDecorations } from "@/components/eid-decorations";
 import { DecorativeLights } from "@/components/decorative-lights";
 import { TopNav } from "@/components/top-nav";
-import { Footer } from "@/components/footer";
 import "./globals.css";
 import Script from "next/script";
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const defaultUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://chandpostal.vercel.app"
+    : "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Chand Postal | IUB Programming Club",
   description:
     "Chand Postal is an Eid greeting platform by IUB Programming Club where you can send digital Eid cards to your loved ones that open on Chand Raat.",
+  alternates: {
+    canonical: defaultUrl,
+  },
   icons: {
     icon: "/chand_icon.png",
     apple: "/chand_icon.png",
