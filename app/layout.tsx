@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   authors: [
-    { name: 'Md Rashedul Islam Sabbir', url: 'https://risabbir.vercel.app/' },
+    { name: 'Md Rashedul Islam Sabbir', url: 'https://risabbir.me/' },
     { name: 'Zaid Fahad', url: 'https://zaidfahad.com/' },
     { name: 'IUB Programming Club', url: 'https://iubpc.vercel.app/' },
   ],
